@@ -3,6 +3,7 @@ package xyz.seleya.ethereum.ens.ensjavaclient;
 import io.ipfs.cid.Cid;
 import io.ipfs.multihash.Multihash;
 import org.slf4j.Logger;
+import org.springframework.lang.NonNull;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.Contracts;
@@ -20,11 +21,13 @@ import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 
+import java.util.Optional;
+
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.web3j.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
 import static org.web3j.ens.EnsResolver.REVERSE_NAME_SUFFIX;
 
-public class PowerfulEnsResolver {
+public class PowerfulEnsResolver implements EnsResolver {
 
     private static final Logger log = getLogger(PowerfulEnsResolver.class);
 
@@ -235,5 +238,10 @@ public class PowerfulEnsResolver {
 
         return PublicResolver.load(
                 resolverAddress, web3j, transactionManager, new DefaultGasProvider());
+    }
+
+    @Override
+    public Optional<String> findContentHash(@NonNull final String contractId) {
+        return Optional.empty();
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
@@ -18,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EnsResolverImplementationIntegrationTest {
+
+    @LocalServerPort
+    private int testServerPort;
 
     private final static String WEB3_CLIENT_VERSION = "Geth/v1.10.15-omnibus-hotfix-f4decf48/linux-amd64/go1.17.6";
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";

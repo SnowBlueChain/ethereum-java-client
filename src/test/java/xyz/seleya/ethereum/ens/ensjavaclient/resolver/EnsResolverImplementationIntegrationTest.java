@@ -12,6 +12,7 @@ import org.web3j.protocol.http.HttpService;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,12 +29,14 @@ public class EnsResolverImplementationIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        web3j = Web3j.build(new HttpService("https://mainnet.infura.io/v3/fbf0764a9e084633a4096a3e59878300"));
+        web3j = Web3j.build(new HttpService("http://localhost:8545"));
+        ensResolverImplementationTestInstance = EnsResolverImplementation.getInstance(web3j);
     }
 
     @Test
     public void getContentHash_happycase() {
         final Optional<String> actual = ensResolverImplementationTestInstance.findContentHash(ENS_NAME_KOHORST_ETH);
-        assertEquals( Optional.ofNullable(CONTENT_HASH_FROM_KOHORST_ETH), actual);
+        assertTrue(actual.isPresent());
+        assertEquals(CONTENT_HASH_FROM_KOHORST_ETH, actual.get());
     }
 }

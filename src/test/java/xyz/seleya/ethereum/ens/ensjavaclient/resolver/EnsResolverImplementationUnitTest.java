@@ -28,14 +28,12 @@ public class EnsResolverImplementationUnitTest {
 
     @Test
     void isValidEnsName_happycase() {
-        // trigger the call
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(ENS_NAME_KOHORST_ETH);
         assertTrue(actual);
     }
 
     @Test
     void isValidEnsNae_nullcase() {
-        // trigger the call
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NULL_CASE);
         assertFalse(actual);
     }
@@ -43,7 +41,6 @@ public class EnsResolverImplementationUnitTest {
 
     @Test
     void isValidEnsNae_unhappycase() {
-        // trigger the call
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_PENG_COM);
         assertFalse(actual);
     }

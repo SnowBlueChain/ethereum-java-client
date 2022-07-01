@@ -7,11 +7,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.protocol.Web3j;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class EnsResolverImplementationUnitTest {
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
+    private final static String NON_ENS_NAME_PENG_COM = "pengcom";
+    private final static String NULL_CASE = null;
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
 
@@ -28,5 +31,20 @@ public class EnsResolverImplementationUnitTest {
         // trigger the call
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(ENS_NAME_KOHORST_ETH);
         assertTrue(actual);
+    }
+
+    @Test
+    void isValidEnsNae_nullcase() {
+        // trigger the call
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NULL_CASE);
+        assertFalse(actual);
+    }
+
+
+    @Test
+    void isValidEnsNae_unhappycase() {
+        // trigger the call
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_PENG_COM);
+        assertFalse(actual);
     }
 }

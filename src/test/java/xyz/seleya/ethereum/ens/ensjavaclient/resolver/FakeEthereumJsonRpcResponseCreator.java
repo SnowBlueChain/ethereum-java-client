@@ -8,6 +8,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
+ * This is test utility class. It returns faked json-rpc responses for Ethereum APIs.
+ * <p />
  * @see <a href="https://ethereum.org/en/developers/docs/apis/json-rpc/">Ethereum Developers - json-rpc</a>
  * @see <a href="https://docs.infura.io/infura/networks/ethereum/json-rpc-methods">Infura Ethereum doc - json-rpc</a>
  */

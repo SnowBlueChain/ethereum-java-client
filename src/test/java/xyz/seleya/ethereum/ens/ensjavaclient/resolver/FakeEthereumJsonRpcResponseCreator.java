@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class Utilities {
+public class FakeEthereumJsonRpcResponseCreator {
 
     private static final String JSON_FILE_BASE_PATH = "ethereumjsonrpcresponses";
     private static final String NET_VERSION_JSON_FILE = "/net_version.json";
@@ -15,19 +15,19 @@ public class Utilities {
     private static final String ETH_SYNC_FALSE_JSON_FILE = "/eth_sync_false.json";
     private static final String ETH_GET_BLOCK_BY_NUMBER_JSON_FILE = "/eth_getBlockByNumber.json";
 
-    public String getNetVersionResponse() throws IOException, URISyntaxException {
+    public String getNetVersion() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + NET_VERSION_JSON_FILE);
     }
 
-    public String getEthSyncTrueResponse() throws IOException, URISyntaxException {
+    public String getEthSyncTrue() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_SYNC_TRUE_JSON_FILE);
     }
 
-    public String getEthSyncFalseResponse() throws IOException, URISyntaxException {
+    public String getEthSyncFalse() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_SYNC_FALSE_JSON_FILE);
     }
 
-    public String getEthGetBlockByNumberResponse() throws IOException, URISyntaxException {
+    public String getEthGetBlockByNumber() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BLOCK_BY_NUMBER_JSON_FILE);
     }
 

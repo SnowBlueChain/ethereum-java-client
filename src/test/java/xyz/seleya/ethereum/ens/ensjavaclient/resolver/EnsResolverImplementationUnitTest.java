@@ -5,7 +5,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.Assert;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.protocol.Web3j;
@@ -23,9 +25,12 @@ public class EnsResolverImplementationUnitTest {
     private final static String NON_ENS_NAME_HELLO_COM = "hellocom";
     private final static String NULL_CASE = null;
 
-    private EnsResolverImplementation ensResolverImplementationTestInstance;
-    private Web3j web3jTestInstance;
+    // Mock backend service
     private static MockWebServer mockBackEnd;
+
+    private EnsResolverImplementation ensResolverImplementationTestInstance;
+
+    private Web3j web3jTestInstance;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -57,22 +62,17 @@ public class EnsResolverImplementationUnitTest {
     void isValidEnsNae_unhappycase() {
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_HELLO_COM);
         assertFalse(actual);
-
     }
 
     @Test
     void isSynced_true_happycase() throws Exception {
         // Set up mocked response for eth_sync request
-        String stubbedResponseEthSyncFalse = new Utilities().getEthSyncFalseResponse();
-        mockBackEnd.enqueue(new MockResponse()
-                .setBody(stubbedResponseEthSyncFalse)
-                .addHeader("Content-Type", "application/json"));
+        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse).addHeader("Content-Type", "application/json"));
 
         // Set up mocked response for eth_getBlockByNumber request
-        String stubbedResponseBlockNumber = new Utilities().getEthGetBlockByNumberResponse();
-        mockBackEnd.enqueue(new MockResponse()
-                .setBody(stubbedResponseBlockNumber)
-                .addHeader("Content-Type", "application/json"));
+        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber).addHeader("Content-Type", "application/json"));
 
         // trigger the method call that is being tested
         assertTrue(ensResolverImplementationTestInstance.isSynced());
@@ -94,12 +94,10 @@ public class EnsResolverImplementationUnitTest {
     }
 
     @Test
-    void isSynced_false() throws Exception {
+    void isSynced_false_happycase() throws Exception {
         // Set up mocked response for eth_sync request
-        String stubbedResponseEthSyncTrue = new Utilities().getEthSyncTrueResponse();
-        mockBackEnd.enqueue(new MockResponse()
-                .setBody(stubbedResponseEthSyncTrue)
-                .addHeader("Content-Type", "application/json"));
+        String stubbedResponseEthSyncTrue = new FakeEthereumJsonRpcResponseCreator().getEthSyncTrue();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncTrue).addHeader("Content-Type", "application/json"));
 
         // trigger the method call that is being tested
         assertFalse(ensResolverImplementationTestInstance.isSynced());
@@ -110,12 +108,15 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 
+    /**
+     * TODO not working yet
+     *
+     * @throws Exception
+     */
     @Test
     void lookupResolver_happycase() throws Exception {
-        String stubbedResponse = new Utilities().getNetVersionResponse();
-        mockBackEnd.enqueue(new MockResponse()
-                .setBody(stubbedResponse)
-                .addHeader("Content-Type", "application/json"));
+        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse).addHeader("Content-Type", "application/json"));
 
         // trigger the method call that is being tested
 //        ensResolverImplementationTestInstance.lookupResolver(ENS_NAME_KOHORST_ETH);

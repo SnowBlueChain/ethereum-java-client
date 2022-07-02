@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import okio.Buffer;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -12,20 +11,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.web3j.ens.Contracts;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class EnsResolverImplementationUnitTest {
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
+    private final static String NON_ENS_NAME_HELLO_COM = "hellocom";
+    private final static String NULL_CASE = null;
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
     private Web3j web3jTestInstance;
@@ -51,9 +50,21 @@ public class EnsResolverImplementationUnitTest {
 
     @Test
     void isValidEnsName_happycase() {
-        // trigger the call
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(ENS_NAME_KOHORST_ETH);
         assertTrue(actual);
+    }
+
+    @Test
+    void isValidEnsNae_nullcase() {
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NULL_CASE);
+        assertFalse(actual);
+    }
+
+    @Test
+    void isValidEnsNae_unhappycase() {
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_HELLO_COM);
+        assertFalse(actual);
+
     }
 
     @Test

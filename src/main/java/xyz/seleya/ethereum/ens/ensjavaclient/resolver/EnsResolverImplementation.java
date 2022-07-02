@@ -60,7 +60,7 @@ public class EnsResolverImplementation implements EnsResolver {
     @Override
     public boolean isValidEnsName(String input) {
         return input != null
-                && (input.contains(".") || !WalletUtils.isValidAddress(input, this.addressLength));
+                && (input.contains(".") || WalletUtils.isValidAddress(input, this.addressLength));
     }
 
     @Override

@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+/**
+ * @see <a href="https://ethereum.org/en/developers/docs/apis/json-rpc/">Ethereum Developers - json-rpc</a>
+ * @see <a href="https://docs.infura.io/infura/networks/ethereum/json-rpc-methods">Infura Ethereum doc - json-rpc</a>
+ */
 public class FakeEthereumJsonRpcResponseCreator {
 
     private static final String JSON_FILE_BASE_PATH = "ethereumjsonrpcresponses";

@@ -159,6 +159,7 @@ public class EnsResolverImplementation implements EnsResolver {
     boolean isSynced() throws Exception {
         EthSyncing ethSyncing = web3j.ethSyncing().send();
         if (ethSyncing.isSyncing()) {
+            // return false since syncing in progress
             return false;
         } else {
             EthBlock ethBlock =

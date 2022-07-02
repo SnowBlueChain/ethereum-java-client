@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(MockitoExtension.class)
 public class EnsResolverImplementationUnitTest {
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
-    private final static String NON_ENS_NAME_PENG_COM = "pengcom";
+    private final static String NON_ENS_NAME_HELLO_COM = "hellocom";
     private final static String NULL_CASE = null;
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
@@ -41,7 +41,7 @@ public class EnsResolverImplementationUnitTest {
 
     @Test
     void isValidEnsNae_unhappycase() {
-        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_PENG_COM);
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_HELLO_COM);
         assertFalse(actual);
     }
 }

@@ -1,5 +1,9 @@
 {
   "jsonrpc": "2.0",
   "id": 1,
-  "result": true
+  "result": {
+    "startingBlock": "0x384",
+    "currentBlock": "0x386",
+    "highestBlock": "0x454"
+  }
 }

@@ -23,6 +23,8 @@ public class EnsResolverImplementationIntegrationTest {
     @LocalServerPort
     private int testServerPort;
 
+    private final static String BASE_URL = "http://localhost";
+
     private final static String WEB3_CLIENT_VERSION = "Geth/v1.10.15-omnibus-hotfix-f4decf48/linux-amd64/go1.17.6";
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
     private final static String CONTENT_HASH_FROM_KOHORST_ETH = "QmatNA86VTCzVW5UAo37gdb6KY344ZwN3ngPfe7qEBdtBe";

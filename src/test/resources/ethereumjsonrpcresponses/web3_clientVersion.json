@@ -1,0 +1,5 @@
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": "Geth/v1.10.15-omnibus-hotfix-f4decf48/linux-amd64/go1.17.6"
+}

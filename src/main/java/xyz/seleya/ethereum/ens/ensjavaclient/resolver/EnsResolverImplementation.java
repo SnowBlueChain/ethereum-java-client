@@ -197,4 +197,20 @@ public class EnsResolverImplementation implements EnsResolver {
             throw new EnsResolutionException("EnsName is invalid: " + ensName);
         }
     }
+
+    // text records
+    public String findUrlInTextRecords(@NonNull final String contractId) {
+        if (isValidEnsName(contractId)) {
+            PublicResolver resolver = lookupResolver(contractId);
+            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            try {
+                String url = resolver.text(nameHash, "url").send();
+                log.info("text record - url: " + url);
+                return url;
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to execute Ethereum request", e);
+            }
+        }
+        return "";
+    }
 }

@@ -16,6 +16,7 @@ import org.web3j.protocol.http.HttpService;
 import java.io.IOException;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -62,6 +63,45 @@ public class EnsResolverImplementationUnitTest {
     void isValidEnsNae_unhappycase() {
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_ENS_NAME_HELLO_COM);
         assertFalse(actual);
+    }
+
+    @Test
+    void findUrlInTextRecords_happycase() throws Exception {
+        // Set up mocked response for eth_sync request
+        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for eth_getBlockByNumber request
+        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for net_version
+        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for ens_resolver
+        String stubbedResponseEthCallResolverEns = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverEns();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverEns)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for ens_text
+        String stubbedResponseEthCallEnsTextKohorstEth =
+                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextKohorstEth();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextKohorstEth)
+                .addHeader("Content-Type", "application/json"));
+
+        // trigger the method call that is being tested
+        final String actual = ensResolverImplementationTestInstance.findUrlInTextRecords(ENS_NAME_KOHORST_ETH);
+
+        assertEquals("https://lucaskohorst.com", actual);
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 
     @Test

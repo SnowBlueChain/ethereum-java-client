@@ -20,8 +20,10 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_SYNC_TRUE_JSON_FILE = "/eth_sync_true.json";
     private static final String ETH_SYNC_FALSE_JSON_FILE = "/eth_sync_false.json";
     private static final String ETH_GET_BLOCK_BY_NUMBER_JSON_FILE = "/eth_getBlockByNumber.json";
-    private static final String ETH_CALL_ENS_TEXT_JSON_FILE = "/eth_call_ens_text_kohorst_eth.json";
-    private static final String ETH_CALL_ENS_RESOLVER_JSON_FILE = "/eth_call_ens_resolver_ens.json";
+    private static final String ETH_CALL_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_ens.json";
+    private static final String ETH_CALL_ENS_TEXT_URL_JSON_FILE = "/eth_call_ens_text_url_kohorst_eth.json";
+    private static final String ETH_CALL_ENS_TEXT_TWITTER_JSON_FILE = "/eth_call_ens_text_twitter_kohorst_eth.json";
+    private static final String ETH_CALL_ENS_TEXT_GITHUB_JSON_FILE = "/eth_call_ens_text_github_kohorst_eth.json";
 
     public String getNetVersion() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + NET_VERSION_JSON_FILE);
@@ -39,10 +41,17 @@ public class FakeEthereumJsonRpcResponseCreator {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BLOCK_BY_NUMBER_JSON_FILE);
     }
 
-    public String getEthCallEnsTextKohorstEth() throws IOException, URISyntaxException {
-        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_JSON_FILE);
+    public String getEthCallEnsTextUrlKohorstEth() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_URL_JSON_FILE);
     }
 
+    public String getEthCallEnsTextTwitterKohorstEth() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_TWITTER_JSON_FILE);
+    }
+
+    public String getEthCallEnsTextGithubKohorstEth() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_GITHUB_JSON_FILE);
+    }
     public String getEthCallResolverEns() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_RESOLVER_JSON_FILE);
     }

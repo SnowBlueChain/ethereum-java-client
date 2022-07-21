@@ -213,4 +213,34 @@ public class EnsResolverImplementation implements EnsResolver {
         }
         return "";
     }
+
+    public String findTwitterInTextRecords(@NonNull final String contractId) {
+        if (isValidEnsName(contractId)) {
+            PublicResolver resolver = lookupResolver(contractId);
+            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            try {
+                String twitter = resolver.text(nameHash, "vnd.twitter").send();
+                log.info("text record - twitter: " + twitter);
+                return twitter;
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to execute Ethereum request", e);
+            }
+        }
+        return "";
+    }
+
+    public String findGithubInTextRecords(@NonNull final String contractId) {
+        if (isValidEnsName(contractId)) {
+            PublicResolver resolver = lookupResolver(contractId);
+            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            try {
+                String github = resolver.text(nameHash, "vnd.github").send();
+                log.info("text record - github: " + github);
+                return github;
+            } catch (Exception e) {
+                throw new RuntimeException("Unable to execute Ethereum request", e);
+            }
+        }
+        return "";
+    }
 }

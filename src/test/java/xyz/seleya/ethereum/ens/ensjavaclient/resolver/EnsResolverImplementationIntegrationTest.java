@@ -36,23 +36,23 @@ public class EnsResolverImplementationIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        web3j = Web3j.build(new HttpService("https://mainnet.infura.io/v3/fbf0764a9e084633a4096a3e59878300"));
+        web3j = Web3j.build(new HttpService("http://localhost"));
         ensResolverImplementationTestInstance = EnsResolverImplementation.getInstance(web3j);
     }
 
-    @Test
+    //@Test
     public void findUrlTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findUrlInTextRecords("kohorst.eth");
         assertEquals("https://lucaskohorst.com", actual);
     }
 
-    @Test
+    //@Test
     public void findTwitterInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findTwitterInTextRecords("kohorst.eth");
         assertEquals("KohorstLucas", actual);
     }
 
-    @Test
+    //@Test
     public void findGithubInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findGithubInTextRecords("kohorst.eth");
         assertEquals("Kohorst-Lucas", actual);

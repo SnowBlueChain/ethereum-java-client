@@ -1,11 +1,9 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
-import com.google.gson.Gson;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.Assert;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +13,6 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -66,8 +63,7 @@ public class EnsResolverImplementationUnitTest {
         assertFalse(actual);
     }
 
-    @Test
-    void findUrlInTextRecords_happycase() throws Exception {
+    private void setupMockedResponse(String key) throws Exception {
         // Set up mocked response for eth_sync request
         String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
@@ -88,14 +84,20 @@ public class EnsResolverImplementationUnitTest {
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverEns)
                 .addHeader("Content-Type", "application/json"));
 
-        // Set up mocked response for ens_text
-        String stubbedResponseEthCallEnsTextUrlKohorstEth =
-                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextUrlKohorstEth();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextUrlKohorstEth)
+
+        // Set up mocked response for key = "url", "twitter", "github"
+        String stubbedResponseEthCallEnsTextKohorstEth =
+                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextKohorstEth(key);
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextKohorstEth)
                 .addHeader("Content-Type", "application/json"));
+    }
+
+    @Test
+    void findUrlInTextRecords_happycase() throws Exception {
+        setupMockedResponse("url");
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findUrlInTextRecords(ENS_NAME_KOHORST_ETH);
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "url");
 
         assertEquals("https://lucaskohorst.com", actual);
 
@@ -108,34 +110,10 @@ public class EnsResolverImplementationUnitTest {
     // find twitter in text records
     @Test
     void findTwitterInTextRecords_happycase() throws Exception {
-        // Set up mocked response for eth_sync request
-        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for eth_getBlockByNumber request
-        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for net_version
-        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for ens_resolver
-        String stubbedResponseEthCallResolverEns = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverEns();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverEns)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for ens_text_twitter
-        String stubbedResponseEthCallEnsTextTwitterKohorstEth =
-                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextTwitterKohorstEth();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextTwitterKohorstEth)
-                .addHeader("Content-Type", "application/json"));
+        setupMockedResponse("vnd.twitter");
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTwitterInTextRecords(ENS_NAME_KOHORST_ETH);
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "vnd.twitter");
 
         assertEquals("KohorstLucas", actual);
 
@@ -145,37 +123,14 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 
+
     // find github in text records
     @Test
     void findGithubInTextRecords_happycase() throws Exception {
-        // Set up mocked response for eth_sync request
-        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for eth_getBlockByNumber request
-        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for net_version
-        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for ens_resolver
-        String stubbedResponseEthCallResolverEns = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverEns();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverEns)
-                .addHeader("Content-Type", "application/json"));
-
-        // Set up mocked response for ens_text_github
-        String stubbedResponseEthCallEnsTextGithubKohorstEth =
-                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextGithubKohorstEth();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextGithubKohorstEth)
-                .addHeader("Content-Type", "application/json"));
+        setupMockedResponse("vnd.github");
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findGithubInTextRecords(ENS_NAME_KOHORST_ETH);
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "vnd.github");
 
         assertEquals("Kohorst-Lucas", actual);
 

@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Locale;
 
 /**
  * This is test utility class. It returns faked json-rpc responses for Ethereum APIs.
@@ -21,9 +22,10 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_SYNC_FALSE_JSON_FILE = "/eth_sync_false.json";
     private static final String ETH_GET_BLOCK_BY_NUMBER_JSON_FILE = "/eth_getBlockByNumber.json";
     private static final String ETH_CALL_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_ens.json";
-    private static final String ETH_CALL_ENS_TEXT_URL_JSON_FILE = "/eth_call_ens_text_url_kohorst_eth.json";
-    private static final String ETH_CALL_ENS_TEXT_TWITTER_JSON_FILE = "/eth_call_ens_text_twitter_kohorst_eth.json";
-    private static final String ETH_CALL_ENS_TEXT_GITHUB_JSON_FILE = "/eth_call_ens_text_github_kohorst_eth.json";
+
+    // mocked jason file name of url, vnd.twitter, vnd.github
+    private static final String ETH_CALL_ENS_TEXT_PREFIX = "/eth_call_ens_text_";
+    private static final String ETH_CALL_ENS_TEXT_SUFFIX = "_kohorst_eth.json";
 
     public String getNetVersion() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + NET_VERSION_JSON_FILE);
@@ -41,17 +43,10 @@ public class FakeEthereumJsonRpcResponseCreator {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BLOCK_BY_NUMBER_JSON_FILE);
     }
 
-    public String getEthCallEnsTextUrlKohorstEth() throws IOException, URISyntaxException {
-        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_URL_JSON_FILE);
+    public String getEthCallEnsTextKohorstEth(String key) throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + key + ETH_CALL_ENS_TEXT_SUFFIX);
     }
 
-    public String getEthCallEnsTextTwitterKohorstEth() throws IOException, URISyntaxException {
-        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_TWITTER_JSON_FILE);
-    }
-
-    public String getEthCallEnsTextGithubKohorstEth() throws IOException, URISyntaxException {
-        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_GITHUB_JSON_FILE);
-    }
     public String getEthCallResolverEns() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_RESOLVER_JSON_FILE);
     }

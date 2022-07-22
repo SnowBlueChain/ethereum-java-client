@@ -26,14 +26,7 @@ public class EnsResolverImplementationIntegrationTest {
 
     @LocalServerPort
     private int testServerPort;
-
-    private final static String BASE_URL = "http://localhost";
-
-    private final static String WEB3_CLIENT_VERSION = "Geth/v1.10.15-omnibus-hotfix-f4decf48/linux-amd64/go1.17.6";
-    private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
-    private final static String CONTENT_HASH_FROM_KOHORST_ETH = "QmatNA86VTCzVW5UAo37gdb6KY344ZwN3ngPfe7qEBdtBe";
-    private final static String CONTRACT_ID = "kohorst.eth";
-    private final static String TEST_URL = "https://mainnet.infura.io/v3/fbf0764a9e084633a4096a3e59878300";
+    private final static String TEST_URL = "http://localhost";
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
 
@@ -46,20 +39,20 @@ public class EnsResolverImplementationIntegrationTest {
     }
 
     //@Test
-    public void findUrlTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findUrlInTextRecords("kohorst.eth");
+    public void findUrlInTextRecords_happycase() {
+        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "url");
         assertEquals("https://lucaskohorst.com", actual);
     }
 
     //@Test
     public void findTwitterInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findTwitterInTextRecords("kohorst.eth");
+        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.twitter");
         assertEquals("KohorstLucas", actual);
     }
 
     //@Test
     public void findGithubInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findGithubInTextRecords("kohorst.eth");
+        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.github");
         assertEquals("Kohorst-Lucas", actual);
     }
 }

@@ -85,7 +85,7 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
 
 
-        // Set up mocked response for key = "url", "twitter", "github"
+        // Set up mocked response for key = "url", "vnd.twitter", "vnd.github"
         String stubbedResponseEthCallEnsTextKohorstEth =
                 new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextKohorstEth(key);
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextKohorstEth)
@@ -93,7 +93,7 @@ public class EnsResolverImplementationUnitTest {
     }
 
     @Test
-    void findUrlInTextRecords_happycase() throws Exception {
+    void getUrlInTextRecords_happycase() throws Exception {
         setupMockedResponse("url");
 
         // trigger the method call that is being tested
@@ -109,7 +109,7 @@ public class EnsResolverImplementationUnitTest {
 
     // find twitter in text records
     @Test
-    void findTwitterInTextRecords_happycase() throws Exception {
+    void getTwitterInTextRecords_happycase() throws Exception {
         setupMockedResponse("vnd.twitter");
 
         // trigger the method call that is being tested
@@ -126,7 +126,7 @@ public class EnsResolverImplementationUnitTest {
 
     // find github in text records
     @Test
-    void findGithubInTextRecords_happycase() throws Exception {
+    void getGithubInTextRecords_happycase() throws Exception {
         setupMockedResponse("vnd.github");
 
         // trigger the method call that is being tested

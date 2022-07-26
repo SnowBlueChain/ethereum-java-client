@@ -198,60 +198,30 @@ public class EnsResolverImplementation implements EnsResolver {
         }
     }
 
-    // TODO refactor find Url, Twitter, Github in text records
-    public String findTextRecords(@NonNull final String ethDomainName, String key) {
+    // text records
+    public String findTextRecords(@NonNull final String ethDomainName, String keyword) {
         PublicResolver resolver = lookupResolver(ethDomainName);
         byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
         try {
-            String textRecords = resolver.text(nameHash, key).send();
-            log.info("text record - " + key + " : " + key);
-            return textRecords;
+            String textRecord = resolver.text(nameHash, keyword).send();
+            log.info("text record - " + keyword + " : " + textRecord);
+            return textRecord;
         } catch (Exception e) {
-            return "";
+            //throw new RuntimeException("Unable to execute Ethereum request", e);
+            return null;
         }
     }
 
-    // text records
-//    public String findUrlInTextRecords(@NonNull final String ethDomainName) {
-//        PublicResolver resolver = lookupResolver(ethDomainName);
-//        byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
-//        try {
-//            String url = resolver.text(nameHash, "url").send();
-//            log.info("text record - url: " + url);
-//            return url;
-//        } catch (Exception e) {
-//            //throw new RuntimeException("Unable to execute Ethereum request", e);
-//            return null;
-//        }
-//    }
-//
-//    public String findTwitterInTextRecords(@NonNull final String contractId) {
-//        if (isValidEnsName(contractId)) {
-//            PublicResolver resolver = lookupResolver(contractId);
-//            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-//            try {
-//                String twitter = resolver.text(nameHash, "vnd.twitter").send();
-//                log.info("text record - twitter: " + twitter);
-//                return twitter;
-//            } catch (Exception e) {
-//                throw new RuntimeException("Unable to execute Ethereum request", e);
-//            }
-//        }
-//        return "";
-//    }
-//
-//    public String findGithubInTextRecords(@NonNull final String contractId) {
-//        if (isValidEnsName(contractId)) {
-//            PublicResolver resolver = lookupResolver(contractId);
-//            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
-//            try {
-//                String github = resolver.text(nameHash, "vnd.github").send();
-//                log.info("text record - github: " + github);
-//                return github;
-//            } catch (Exception e) {
-//                throw new RuntimeException("Unable to execute Ethereum request", e);
-//            }
-//        }
-//        return "";
-//    }
+    // text records getter methods of url, vnd.twitter, and vnd.github
+    public String getUrlInTextRecords(@NonNull final String contractId) {
+        return findTextRecords(contractId, "url");
+    }
+
+    public String getTwitterInTextRecords(@NonNull final String contractId) {
+        return findTextRecords(contractId, "vnd.twitter");
+    }
+
+    public String getGithubInTextRecords(@NonNull final String contractId) {
+        return findTextRecords(contractId, "vnd.github");
+    }
 }

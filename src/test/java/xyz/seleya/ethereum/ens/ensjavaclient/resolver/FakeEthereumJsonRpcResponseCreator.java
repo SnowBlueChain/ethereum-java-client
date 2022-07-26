@@ -43,8 +43,9 @@ public class FakeEthereumJsonRpcResponseCreator {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BLOCK_BY_NUMBER_JSON_FILE);
     }
 
-    public String getEthCallEnsTextKohorstEth(String key) throws IOException, URISyntaxException {
-        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + key + ETH_CALL_ENS_TEXT_SUFFIX);
+    public String getEthCallEnsTextKohorstEth(String keyword) throws IOException, URISyntaxException {
+        keyword = keyword.replace('.', '_');
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + keyword + ETH_CALL_ENS_TEXT_SUFFIX);
     }
 
     public String getEthCallResolverEns() throws IOException, URISyntaxException {

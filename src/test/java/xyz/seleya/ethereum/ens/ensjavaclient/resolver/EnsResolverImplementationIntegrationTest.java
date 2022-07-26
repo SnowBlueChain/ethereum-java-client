@@ -39,19 +39,19 @@ public class EnsResolverImplementationIntegrationTest {
     }
 
     //@Test
-    public void findUrlInTextRecords_happycase() {
+    public void getUrlInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "url");
         assertEquals("https://lucaskohorst.com", actual);
     }
 
     //@Test
-    public void findTwitterInTextRecords_happycase() {
+    public void getTwitterInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.twitter");
         assertEquals("KohorstLucas", actual);
     }
 
     //@Test
-    public void findGithubInTextRecords_happycase() {
+    public void getGithubInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.github");
         assertEquals("Kohorst-Lucas", actual);
     }

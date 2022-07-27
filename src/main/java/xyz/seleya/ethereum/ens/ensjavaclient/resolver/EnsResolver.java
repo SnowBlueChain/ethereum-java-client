@@ -22,4 +22,29 @@ public interface EnsResolver {
      * @return true if valid; otherwise, false.
      */
     boolean isValidEnsName(String ensName);
+
+    /**
+     * Returns the url in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a url, if any.
+     */
+    String getUrlInTextRecords(String contractId);
+
+    /**
+     * Returns the name of twitter in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a name of Twitter account, if any.
+     */
+    String getTwitterInTextRecords(String contractId);
+
+
+    /**
+     * Returns the name of github in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a name of github account, if any.
+     */
+    String getGithubInTextRecords(String contractId);
 }

@@ -213,14 +213,17 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     // text records getter methods of url, vnd.twitter, and vnd.github
+    @Override
     public String getUrlInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, "url");
     }
 
+    @Override
     public String getTwitterInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, "vnd.twitter");
     }
 
+    @Override
     public String getGithubInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, "vnd.github");
     }

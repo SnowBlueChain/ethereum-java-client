@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.protocol.Web3j;
+
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.ClientTransactionManager;
+import org.web3j.tx.TransactionManager;
+import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 
 import java.io.IOException;
 
@@ -75,8 +79,8 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
 
         // Set up mocked response for net_version
-        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse)
+        String stubbedResponseNetVersion = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseNetVersion)
                 .addHeader("Content-Type", "application/json"));
 
         // Set up mocked response for ens_resolver
@@ -175,14 +179,36 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 
-    /**
-     * TODO not working yet
-     *
-     * @throws Exception
-     */
+
     @Test
     void lookupResolver_happycase() throws Exception {
-        String stubbedResponse = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
-        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponse).addHeader("Content-Type", "application/json"));
+        // Set up mocked response for eth_sync request
+        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for eth_getBlockByNumber request
+        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for net_version
+        String stubbedResponseNetVersion = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseNetVersion)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for ens_resolver
+        String stubbedResponseEthCallResolverEns = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverEns();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverEns)
+                .addHeader("Content-Type", "application/json"));
+
+        PublicResolver actual = ensResolverImplementationTestInstance.lookupResolver(ENS_NAME_KOHORST_ETH);
+
+        String expectedContractAddress = "0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41";
+        String actualContractAddress = actual.getContractAddress();
+
+        // trigger the method call that is being tested
+        assertEquals(expectedContractAddress, actualContractAddress);
+
     }
 }

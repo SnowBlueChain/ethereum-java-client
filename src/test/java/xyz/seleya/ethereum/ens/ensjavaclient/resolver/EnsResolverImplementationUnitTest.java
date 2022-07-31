@@ -5,10 +5,13 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.web3j.ens.EnsResolutionException;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.http.HttpService;
@@ -18,8 +21,7 @@ import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +29,8 @@ public class EnsResolverImplementationUnitTest {
     private final static String ENS_NAME_KOHORST_ETH = "kohorst.eth";
     private final static String NON_ENS_NAME_HELLO_COM = "hellocom";
     private final static String NULL_CASE = null;
+
+    private final static String NON_EXISTING_ENS_NAME = "nonexistingfjkejri.eth";
 
     // Mock backend service
     private static MockWebServer mockBackEnd;
@@ -59,6 +63,12 @@ public class EnsResolverImplementationUnitTest {
     void isValidEnsNae_nullcase() {
         boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NULL_CASE);
         assertFalse(actual);
+    }
+
+    @Test
+    void isValidEnsNae_non_existing_name() {
+        boolean actual = ensResolverImplementationTestInstance.isValidEnsName(NON_EXISTING_ENS_NAME);
+        assertTrue(actual);
     }
 
     @Test
@@ -110,6 +120,53 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
+
+    @Test
+    void getUrlInTextRecords_ThrowEnsResolutionException_When_EnsName_Invalid() throws Exception {
+        setupMockedResponse("url");
+
+        Executable executable = () -> ensResolverImplementationTestInstance.findTextRecords(NON_ENS_NAME_HELLO_COM, "url");
+        Assertions.assertThrows(EnsResolutionException.class, executable);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    void getUrlInTextRecords_ThrowEnsResolutionException_With_NonExisting_EnsName() throws Exception {
+//        setupMockedResponse("url");
+
+        // Set up mocked response for eth_sync request
+        String stubbedResponseEthSyncFalse = new FakeEthereumJsonRpcResponseCreator().getEthSyncFalse();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthSyncFalse)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for eth_getBlockByNumber request
+        String stubbedResponseBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthGetBlockByNumber();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseBlockNumber)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for net_version
+        String stubbedResponseNetVersion = new FakeEthereumJsonRpcResponseCreator().getNetVersion();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseNetVersion)
+                .addHeader("Content-Type", "application/json"));
+
+        // Set up mocked response for ens_resolver
+        String stubbedResponseEthCallResolverNonExistingEns = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverNonExistingEns();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallResolverNonExistingEns)
+                .addHeader("Content-Type", "application/json"));
+
+
+        // Set up mocked response for key = "url", "vnd.twitter", "vnd.github"
+        String stubbedResponseEthCallEnsTextNonExistingKohorstEth =
+                new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextNonExistingKohorstEth("url");
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextNonExistingKohorstEth)
+                .addHeader("Content-Type", "application/json"));
+
+        String actual = ensResolverImplementationTestInstance.findTextRecords(NON_EXISTING_ENS_NAME, "url");
+        Assertions.assertEquals(null, actual);
+    }
+
 
     // find twitter in text records
     @Test
@@ -211,4 +268,8 @@ public class EnsResolverImplementationUnitTest {
         assertEquals(expectedContractAddress, actualContractAddress);
 
     }
+
+
+
+
 }

@@ -26,7 +26,7 @@ public class EnsResolverImplementationIntegrationTest {
 
     @LocalServerPort
     private int testServerPort;
-    private final static String TEST_URL = "http://localhost";
+    private final static String TEST_URL = "https://localhotst";
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
 
@@ -42,6 +42,12 @@ public class EnsResolverImplementationIntegrationTest {
     public void getUrlInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "url");
         assertEquals("https://lucaskohorst.com", actual);
+    }
+
+    //@Test
+    public void getUrlInTextRecords_unhappycase() {
+        final String actual = ensResolverImplementationTestInstance.findTextRecords("324tgadgae454wq.eth", "url");
+        assertEquals(null, actual);
     }
 
     //@Test

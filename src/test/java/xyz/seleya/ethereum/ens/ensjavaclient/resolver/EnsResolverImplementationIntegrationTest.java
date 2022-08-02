@@ -26,7 +26,7 @@ public class EnsResolverImplementationIntegrationTest {
 
     @LocalServerPort
     private int testServerPort;
-    private final static String TEST_URL = "https://localhotst";
+    private final static String TEST_URL = "https://localhost";
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
 
@@ -40,25 +40,25 @@ public class EnsResolverImplementationIntegrationTest {
 
     //@Test
     public void getUrlInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "url");
+        final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("kohorst.eth");
         assertEquals("https://lucaskohorst.com", actual);
     }
 
     //@Test
     public void getUrlInTextRecords_unhappycase() {
-        final String actual = ensResolverImplementationTestInstance.findTextRecords("324tgadgae454wq.eth", "url");
+        final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("324tgadgae454wq.eth");
         assertEquals(null, actual);
     }
 
     //@Test
     public void getTwitterInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.twitter");
+        final String actual = ensResolverImplementationTestInstance.getTwitterInTextRecords("kohorst.eth");
         assertEquals("KohorstLucas", actual);
     }
 
     //@Test
     public void getGithubInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.findTextRecords("kohorst.eth", "vnd.github");
+        final String actual = ensResolverImplementationTestInstance.getGithubInTextRecords("kohorst.eth");
         assertEquals("Kohorst-Lucas", actual);
     }
 }

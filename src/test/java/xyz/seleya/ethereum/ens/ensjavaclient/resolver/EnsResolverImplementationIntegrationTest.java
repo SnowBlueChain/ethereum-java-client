@@ -26,7 +26,7 @@ public class EnsResolverImplementationIntegrationTest {
 
     @LocalServerPort
     private int testServerPort;
-    private final static String TEST_URL = "https://localhost";
+    private final static String TEST_URL = System.getenv("INFURA_API_KEY_URL");
 
     private EnsResolverImplementation ensResolverImplementationTestInstance;
 
@@ -38,25 +38,25 @@ public class EnsResolverImplementationIntegrationTest {
         ensResolverImplementationTestInstance = EnsResolverImplementation.getInstance(web3j);
     }
 
-    //@Test
+    @Test
     public void getUrlInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("kohorst.eth");
         assertEquals("https://lucaskohorst.com", actual);
     }
 
-    //@Test
+    @Test
     public void getUrlInTextRecords_unhappycase() {
         final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("324tgadgae454wq.eth");
         assertEquals(null, actual);
     }
 
-    //@Test
+    @Test
     public void getTwitterInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.getTwitterInTextRecords("kohorst.eth");
         assertEquals("KohorstLucas", actual);
     }
 
-    //@Test
+    @Test
     public void getGithubInTextRecords_happycase() {
         final String actual = ensResolverImplementationTestInstance.getGithubInTextRecords("kohorst.eth");
         assertEquals("Kohorst-Lucas", actual);

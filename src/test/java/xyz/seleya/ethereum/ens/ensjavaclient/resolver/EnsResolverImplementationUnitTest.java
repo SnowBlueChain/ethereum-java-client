@@ -143,7 +143,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.name(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, GlobalKey.URL.getKey());

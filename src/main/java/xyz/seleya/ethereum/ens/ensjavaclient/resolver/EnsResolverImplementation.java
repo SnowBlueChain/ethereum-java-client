@@ -21,7 +21,10 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
+import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
+import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -199,7 +202,7 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     // text records
-    public String findTextRecords(@NonNull final String ethDomainName, String keyword) {
+    String findTextRecords(@NonNull final String ethDomainName, String keyword) {
         PublicResolver resolver = lookupResolver(ethDomainName);
         byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
         try {
@@ -215,16 +218,16 @@ public class EnsResolverImplementation implements EnsResolver {
     // text records getter methods of url, vnd.twitter, and vnd.github
     @Override
     public String getUrlInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, "url");
+        return findTextRecords(contractId, GlobalKey.URL.getKey());
     }
 
     @Override
     public String getTwitterInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, "vnd.twitter");
+        return findTextRecords(contractId, ServiceKey.TWITTER.getKey());
     }
 
     @Override
     public String getGithubInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, "vnd.github");
+        return findTextRecords(contractId, ServiceKey.GITHUB.getKey());
     }
 }

@@ -12,10 +12,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.ens.EnsResolutionException;
+import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
+import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
+import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
 
@@ -117,7 +120,7 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
     }
 
-    // Step 5: et up mocked response for EthCall in Text with key = "url", "vnd.twitter", "vnd.github"
+    // Step 5: Set up mocked response for EthCall in Text with key = "url", "vnd.twitter", "vnd.github"
     private void setupMockedResponseEthCallTextKohorstEth(String key, boolean happycase) throws Exception {
         String stubbedResponseEthCallEnsTextKohorstEth;
         if (happycase) {
@@ -140,10 +143,10 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth("url", HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "url");
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, GlobalKey.URL.getKey());
 
         assertEquals("https://lucaskohorst.com", actual);
 
@@ -162,9 +165,9 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth("url", HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
 
-        Executable executable = () -> ensResolverImplementationTestInstance.findTextRecords(NON_ENS_NAME_HELLO_COM, "url");
+        Executable executable = () -> ensResolverImplementationTestInstance.findTextRecords(NON_ENS_NAME_HELLO_COM, GlobalKey.URL.getKey());
         Assertions.assertThrows(EnsResolutionException.class, executable);
     }
 
@@ -180,9 +183,9 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(UNHAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth("url", UNHAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), UNHAPPYCASE);
 
-        String actual = ensResolverImplementationTestInstance.findTextRecords(NON_EXISTING_ENS_NAME, "url");
+        String actual = ensResolverImplementationTestInstance.findTextRecords(NON_EXISTING_ENS_NAME, GlobalKey.URL.getKey());
         Assertions.assertEquals(null, actual);
     }
 
@@ -190,14 +193,15 @@ public class EnsResolverImplementationUnitTest {
     @Test
     void getTwitterInTextRecords_happycase() throws Exception {
         // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
         setupMockedEthSync(HAPPYCASE);
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth("vnd.twitter", HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "vnd.twitter");
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
 
         assertEquals("KohorstLucas", actual);
 
@@ -212,14 +216,15 @@ public class EnsResolverImplementationUnitTest {
     @Test
     void getGithubInTextRecords_happycase() throws Exception {
         // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
         setupMockedEthSync(HAPPYCASE);
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth("vnd.github", HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(ServiceKey.GITHUB.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, "vnd.github");
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.GITHUB.getKey());
 
         assertEquals("Kohorst-Lucas", actual);
 
@@ -279,5 +284,25 @@ public class EnsResolverImplementationUnitTest {
 
         // trigger the method call that is being tested
         assertEquals(expectedContractAddress, actualContractAddress);
+    }
+
+    @Test
+    void findTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
+
+        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
+
+        assertEquals("KohorstLucas", actual);
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 }

@@ -61,4 +61,23 @@ public class EnsResolverImplementationIntegrationTest {
         final String actual = ensResolverImplementationTestInstance.getGithubInTextRecords("kohorst.eth");
         assertEquals("Kohorst-Lucas", actual);
     }
+
+    @Test
+    public void findContentHash_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.findContentHash("kohorst.eth");
+        assertTrue(actual.isPresent());
+        assertEquals("QmatNA86VTCzVW5UAo37gdb6KY344ZwN3ngPfe7qEBdtBe", actual.get());
+    }
+
+    @Test
+    public void findContentHash_bad_ens_name() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.findContentHash("324tgadgae454wq.eth");
+        assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    public void findContentHash_empty_string() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.findContentHash("");
+        assertTrue(actual.isEmpty());
+    }
 }

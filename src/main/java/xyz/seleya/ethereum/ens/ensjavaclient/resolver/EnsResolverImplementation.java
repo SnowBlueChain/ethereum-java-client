@@ -24,7 +24,6 @@ import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
-import java.util.Locale;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -68,42 +67,44 @@ public class EnsResolverImplementation implements EnsResolver {
 
     @Override
     public Optional<String> findContentHash(@NonNull final String contractId) {
-        Cid cid = null;
         if (isValidEnsName(contractId)) {
-            PublicResolver resolver = lookupResolver(contractId);
-            byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+            Cid cid = null;
             try {
-                byte[] contentHash = resolver.contenthash(nameHash).send();
-                // Convert the raw contenthash into binary format
-                final String contentHashHexString = Numeric.toHexString(contentHash);
-                log.info("contentHash in binary format: " + contentHashHexString);
+                if (isValidEnsName(contractId)) {
+                    PublicResolver resolver = lookupResolver(contractId);
+                    byte[] nameHash = NameHash.nameHashAsBytes(contractId);
+                    byte[] contentHash = resolver.contenthash(nameHash).send();
+                    // Convert the raw contenthash into binary format
+                    final String contentHashHexString = Numeric.toHexString(contentHash);
+                    log.info("contentHash in binary format: " + contentHashHexString);
 
-                // binary format: 0xe30101701220ba6c1d3e724a3449101474f8dbaf94565985da0ec07240911cdc5bde9f0d55f5
-                // 0xe301: ipfs
-                // 0x01: version
-                // 0x70: DagProtobuf
-                // 0x12: sha2_256
-                // 0x20: the length of the hash
-                final String actualHash = contentHashHexString.substring(14);
-                log.info("actualHash: " + actualHash);
+                    // binary format: 0xe30101701220ba6c1d3e724a3449101474f8dbaf94565985da0ec07240911cdc5bde9f0d55f5
+                    // 0xe301: ipfs
+                    // 0x01: version
+                    // 0x70: DagProtobuf
+                    // 0x12: sha2_256
+                    // 0x20: the length of the hash
+                    final String actualHash = contentHashHexString.substring(14);
+                    log.info("actualHash: " + actualHash);
 
-                // Build the multihash with sha2_256 and the actual hash
-                Multihash multihash = new Multihash(Multihash.Type.sha2_256, Numeric.hexStringToByteArray(actualHash));
-                log.info("multihash: " + multihash);
+                    // Build the multihash with sha2_256 and the actual hash
+                    Multihash multihash = new Multihash(Multihash.Type.sha2_256, Numeric.hexStringToByteArray(actualHash));
+                    log.info("multihash: " + multihash);
 
-                // CID version 0
-                cid = Cid.build(0L, Cid.Codec.DagProtobuf, multihash);
-                // CID version 1
+                    // CID version 0
+                    cid = Cid.build(0L, Cid.Codec.DagProtobuf, multihash);
+                    // CID version 1
 //                Cid cid = Cid.build(1L, Cid.Codec.DagProtobuf, multihash);
-                log.info("contentHash ipfs cid: " + cid);
+                    log.info("contentHash ipfs cid: " + cid);
 //                final String ipfsContentId = Cid.decode(contentHashText).toString();
 //                log.info("ipfsContentId text: " + ipfsContentId);
-
+                    return Optional.ofNullable(cid.toString());
+                }
             } catch (Exception e) {
-                throw new RuntimeException("Unable to execute Ethereum request", e);
+                log.info("Unable to execute Ethereum request");
             }
         }
-        return Optional.ofNullable(cid.toString());
+        return Optional.empty();
     }
 
     public String resolve(String contractId) {

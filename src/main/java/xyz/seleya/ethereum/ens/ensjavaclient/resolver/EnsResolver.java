@@ -54,8 +54,6 @@ public interface EnsResolver {
      *
      * @return block number from the most recent block on Ethereum mainnet.
      */
-    BigInteger getLatestBlockNumber();
-
-
+    Optional<BigInteger> getLatestBlockNumber();
 
 }

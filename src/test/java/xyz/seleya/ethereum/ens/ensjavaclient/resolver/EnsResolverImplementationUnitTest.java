@@ -22,6 +22,7 @@ import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -319,9 +320,11 @@ public class EnsResolverImplementationUnitTest {
     void findLatestBlockNumber_happycase() throws Exception {
         setupMockedResponseEthLatestBlockNumber();
 
-        final BigInteger actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
         final BigInteger expected = new BigInteger("15561295");
-        final int result = expected.compareTo(actual);
+        Assert.assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        final int result = expected.compareTo(actualResult);
         Assert.assertTrue(result <= 0);
     }
 }

@@ -236,11 +236,11 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     @Override
-    public BigInteger getLatestBlockNumber() {
+    public Optional<BigInteger> getLatestBlockNumber() {
         try {
             // eth_blockNumber returns the number of most recent block.
             final EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
-            BigInteger result = blockNumber.getBlockNumber();
+            Optional<BigInteger> result = Optional.ofNullable(blockNumber.getBlockNumber());
             log.info("Latest block number on ethereum :" + result);
             return result;
         } catch (IOException ex) {

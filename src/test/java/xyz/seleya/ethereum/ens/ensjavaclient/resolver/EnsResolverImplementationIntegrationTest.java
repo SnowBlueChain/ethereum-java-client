@@ -84,7 +84,9 @@ public class EnsResolverImplementationIntegrationTest {
 
     @Test
     public void findLatestBlockNumber_happycase() throws Exception {
-        final BigInteger actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
-        assertTrue(actual.compareTo(new BigInteger("15561295")) >= 0);
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
+        assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        assertTrue(actualResult.compareTo(new BigInteger("15561295")) >= 0);
     }
 }

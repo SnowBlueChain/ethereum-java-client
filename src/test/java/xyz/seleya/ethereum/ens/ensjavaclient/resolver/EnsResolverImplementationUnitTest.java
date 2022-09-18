@@ -21,6 +21,7 @@ import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -133,6 +134,14 @@ public class EnsResolverImplementationUnitTest {
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextKohorstEth)
                 .addHeader("Content-Type", "application/json"));
     }
+
+    // Set up for Eth Block Number (find the latest block number)
+    public void setupMockedResponseEthLatestBlockNumber() throws  Exception {
+        String stubbedResponseEthBlockNumber = new FakeEthereumJsonRpcResponseCreator().getEthLatestBlockNumberJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthBlockNumber)
+                .addHeader("Content-Type", "application/json"));
+    }
+
 
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
@@ -304,5 +313,15 @@ public class EnsResolverImplementationUnitTest {
         RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
         Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
+    void findLatestBlockNumber_happycase() throws Exception {
+        setupMockedResponseEthLatestBlockNumber();
+
+        final BigInteger actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
+        final BigInteger expected = new BigInteger("15561295");
+        final int result = expected.compareTo(actual);
+        Assert.assertTrue(result <= 0);
     }
 }

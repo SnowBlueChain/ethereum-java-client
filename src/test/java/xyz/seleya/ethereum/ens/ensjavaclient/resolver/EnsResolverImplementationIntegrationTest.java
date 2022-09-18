@@ -14,6 +14,7 @@ import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -79,5 +80,11 @@ public class EnsResolverImplementationIntegrationTest {
     public void findContentHash_empty_string() {
         final Optional<String> actual = ensResolverImplementationTestInstance.findContentHash("");
         assertTrue(actual.isEmpty());
+    }
+
+    @Test
+    public void findLatestBlockNumber_happycase() throws Exception {
+        final BigInteger actual = ensResolverImplementationTestInstance.getLatestBlockNumber();
+        assertTrue(actual.compareTo(new BigInteger("15561295")) >= 0);
     }
 }

@@ -1,7 +1,7 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.textrecords;
 
 public enum GlobalKey {
-    AVATOR("avator"),
+    AVATAR("avatar"),
     DESCRIPTION("description"),
     DISPLAY("display"),
     EMAIL("email"),

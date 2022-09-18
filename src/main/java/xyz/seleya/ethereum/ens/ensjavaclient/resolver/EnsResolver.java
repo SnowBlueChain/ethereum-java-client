@@ -1,5 +1,6 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 /**
@@ -47,4 +48,12 @@ public interface EnsResolver {
      * @return a name of github account, if any.
      */
     String getGithubInTextRecords(String contractId);
+
+    /**
+     * Returns the latest block number.
+     *
+     * @return block number from the most recent block on Ethereum mainnet.
+     */
+    Optional<BigInteger> getLatestBlockNumber();
+
 }

@@ -13,6 +13,7 @@ import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthSyncing;
 import org.web3j.protocol.core.methods.response.NetVersion;
 import org.web3j.tx.ClientTransactionManager;
@@ -24,6 +25,8 @@ import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
+import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -230,5 +233,19 @@ public class EnsResolverImplementation implements EnsResolver {
     @Override
     public String getGithubInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, ServiceKey.GITHUB.getKey());
+    }
+
+    @Override
+    public Optional<BigInteger> getLatestBlockNumber() {
+        try {
+            // eth_blockNumber returns the number of most recent block.
+            final EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
+            Optional<BigInteger> result = Optional.ofNullable(blockNumber.getBlockNumber());
+            log.info("Latest block number on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error whilst sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+        }
     }
 }

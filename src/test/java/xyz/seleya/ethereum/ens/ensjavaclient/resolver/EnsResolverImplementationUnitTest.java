@@ -156,9 +156,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, GlobalKey.URL.getKey());
+        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, GlobalKey.URL.getKey());
 
-        assertEquals("https://lucaskohorst.com", actual);
+        assertEquals("https://lucaskohorst.com", actual.get());
 
         // Verify the last request to mockBackEnd
         RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
@@ -182,7 +182,7 @@ public class EnsResolverImplementationUnitTest {
     }
 
     /**
-     * @throws Exception Exception was handled as null.
+     * @throws Exception Exception was handled as Optional.empty() an empty object.
      */
     @Test
     void getUrlInTextRecords_ThrowEnsResolutionException_With_NonExisting_EnsName() throws Exception {
@@ -195,8 +195,8 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthCallResolver(UNHAPPYCASE);
         setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), UNHAPPYCASE);
 
-        String actual = ensResolverImplementationTestInstance.findTextRecords(NON_EXISTING_ENS_NAME, GlobalKey.URL.getKey());
-        Assertions.assertEquals(null, actual);
+        Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(NON_EXISTING_ENS_NAME, GlobalKey.URL.getKey());
+        Assertions.assertEquals(Optional.empty(), actual);
     }
 
     // find twitter in text records
@@ -211,9 +211,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
+        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
 
-        assertEquals("KohorstLucas", actual);
+        assertEquals("KohorstLucas", actual.get());
 
         // Verify the last request to mockBackEnd
         RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
@@ -234,9 +234,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthCallTextKohorstEth(ServiceKey.GITHUB.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.GITHUB.getKey());
+        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.GITHUB.getKey());
 
-        assertEquals("Kohorst-Lucas", actual);
+        assertEquals("Kohorst-Lucas", actual.get());
 
         // Verify the last request to mockBackEnd
         RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
@@ -306,9 +306,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthCallResolver(HAPPYCASE);
         setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
 
-        final String actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
+        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
 
-        assertEquals("KohorstLucas", actual);
+        assertEquals("KohorstLucas", actual.get());
 
         // Verify the last request to mockBackEnd
         RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();

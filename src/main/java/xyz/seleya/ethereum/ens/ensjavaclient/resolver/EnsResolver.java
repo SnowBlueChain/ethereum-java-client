@@ -1,6 +1,7 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,7 +31,7 @@ public interface EnsResolver {
      * @param contractId an ENS domain name.
      * @return a url, if any.
      */
-    String getUrlInTextRecords(String contractId);
+    Optional<String> getUrlInTextRecords(String contractId);
 
     /**
      * Returns the name of twitter in text records that's associated with the ENS domain name.
@@ -38,7 +39,7 @@ public interface EnsResolver {
      * @param contractId an ENS domain name.
      * @return a name of Twitter account, if any.
      */
-    String getTwitterInTextRecords(String contractId);
+    Optional<String> getTwitterInTextRecords(String contractId);
 
 
     /**
@@ -47,7 +48,79 @@ public interface EnsResolver {
      * @param contractId an ENS domain name.
      * @return a name of github account, if any.
      */
-    String getGithubInTextRecords(String contractId);
+    Optional<String> getGithubInTextRecords(String contractId);
+
+//    /**
+//     * Returns the name of avatar in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a name of avatar account, if any.
+//     */
+//    Optional<String> getAvatarInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the description in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a description, if any.
+//     */
+//    Optional<String> getDescriptionInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the name of display in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a name of display, if any.
+//     */
+//    Optional<String> getDisplayInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the email in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return an email, if any.
+//     */
+//    Optional<String> getEmailInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the keywords in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return the keywords, if any.
+//     */
+//    Optional<String> getKeywordsInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the mail address in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a mail address, if any.
+//     */
+//    Optional<String> getMailInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the notice in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a notice, if any.
+//     */
+//    Optional<String> getNoticeInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the location in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a location, if any.
+//     */
+//    Optional<String> getLocationInTextRecords(String contractId);
+//
+//    /**
+//     * Returns the phone# in text records that's associated with the ENS domain name.
+//     *
+//     * @param contractId an ENS domain name.
+//     * @return a phone#, if any.
+//     */
+//    Optional<String> getPhoneInTextRecords(String contractId);
 
     /**
      * Returns the latest block number.

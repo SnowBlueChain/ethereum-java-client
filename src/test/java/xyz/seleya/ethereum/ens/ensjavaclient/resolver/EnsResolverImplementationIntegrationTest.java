@@ -41,27 +41,52 @@ public class EnsResolverImplementationIntegrationTest {
 
     @Test
     public void getUrlInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("kohorst.eth");
-        assertEquals("https://lucaskohorst.com", actual);
+        final Optional<String> actual = ensResolverImplementationTestInstance.getUrlInTextRecords("kohorst.eth");
+        assertEquals("https://lucaskohorst.com", actual.get());
     }
 
     @Test
     public void getUrlInTextRecords_unhappycase() {
-        final String actual = ensResolverImplementationTestInstance.getUrlInTextRecords("324tgadgae454wq.eth");
-        assertEquals(null, actual);
+        final Optional<String> actual = ensResolverImplementationTestInstance.getUrlInTextRecords("324tgadgae454wq.eth");
+        assertEquals(Optional.empty(), actual);
     }
 
     @Test
     public void getTwitterInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.getTwitterInTextRecords("kohorst.eth");
-        assertEquals("KohorstLucas", actual);
+        final Optional<String> actual = ensResolverImplementationTestInstance.getTwitterInTextRecords("kohorst.eth");
+        assertEquals("KohorstLucas", actual.get());
     }
 
     @Test
     public void getGithubInTextRecords_happycase() {
-        final String actual = ensResolverImplementationTestInstance.getGithubInTextRecords("kohorst.eth");
-        assertEquals("Kohorst-Lucas", actual);
+        final Optional<String> actual = ensResolverImplementationTestInstance.getGithubInTextRecords("kohorst.eth");
+        assertEquals("Kohorst-Lucas", actual.get());
     }
+
+    @Test
+    public void getAvatarInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getAvatarInTextRecords("digitalpratik.eth");
+        assertEquals("eip155:1/erc1155:0x009fe5cbD30f17699E7ee5D6Df73117677aeDE51/1", actual.get());
+    }
+
+    @Test
+    public void getDescriptionInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getDescriptionInTextRecords("digitalpratik.eth");
+        assertTrue(actual.get().startsWith("Digital Pratik Reminder for you:"));
+    }
+
+    @Test
+    public void getLocationInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getLocationInTextRecords("digitalpratik.eth");
+        assertEquals("Ahmedabad, Gujarat, India", actual.get());
+    }
+
+    @Test
+    public void getNoticeInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNoticeInTextRecords("digitalpratik.eth");
+        assertEquals("this is not for sale, okay!", actual.get());
+    }
+
 
     @Test
     public void findContentHash_happycase() {

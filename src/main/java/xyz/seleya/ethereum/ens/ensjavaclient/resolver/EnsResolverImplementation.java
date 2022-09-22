@@ -27,6 +27,7 @@ import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -206,34 +207,78 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     // text records
-    String findTextRecords(@NonNull final String ethDomainName, String keyword) {
+    Optional<String> findTextRecords(@NonNull final String ethDomainName, String keyword) {
         PublicResolver resolver = lookupResolver(ethDomainName);
         byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
         try {
-            String textRecord = resolver.text(nameHash, keyword).send();
+            Optional<String> textRecord = Optional.ofNullable(resolver.text(nameHash, keyword).send());
             log.info("text record - " + keyword + " : " + textRecord);
             return textRecord;
         } catch (Exception e) {
             //throw new RuntimeException("Unable to execute Ethereum request", e);
-            return null;
+            return Optional.empty();
         }
     }
 
     // text records getter methods of url, vnd.twitter, and vnd.github
     @Override
-    public String getUrlInTextRecords(@NonNull final String contractId) {
+    public Optional<String> getUrlInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, GlobalKey.URL.getKey());
     }
 
     @Override
-    public String getTwitterInTextRecords(@NonNull final String contractId) {
+    public Optional<String> getTwitterInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, ServiceKey.TWITTER.getKey());
     }
 
     @Override
-    public String getGithubInTextRecords(@NonNull final String contractId) {
+    public Optional<String> getGithubInTextRecords(@NonNull final String contractId) {
         return findTextRecords(contractId, ServiceKey.GITHUB.getKey());
     }
+
+    @Override
+    public Optional<String> getAvatarInTextRecords(@NonNull final String contractId) {
+        return findTextRecords(contractId, GlobalKey.AVATAR.getKey());
+    }
+
+    @Override
+    public Optional<String> getDescriptionInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.DESCRIPTION.getKey());
+    }
+//
+//    @Override
+//    public Optional<String> getDisplayInTextRecords(String contractId) {
+//        return findTextRecords(contractId, GlobalKey.DISPLAY.getKey());
+//    }
+//    @Override
+//    public Optional<String> getEmailInTextRecords(String contractId) {
+//        return findTextRecords(contractId, GlobalKey.EMAIL.getKey());
+//    }
+//
+//    @Override
+//    public Optional<String> getKeywordsInTextRecords(String contractId) {
+//        return findTextRecords(contractId, GlobalKey.KEYWORDS.getKey());
+//    }
+//
+//    @Override
+//    public Optional<String> getMailInTextRecords(String contractId) {
+//        return findTextRecords(contractId, GlobalKey.MAIL.getKey());
+//    }
+//
+    @Override
+    public Optional<String> getNoticeInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.NOTICE.getKey());
+    }
+
+    @Override
+    public Optional<String> getLocationInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.LOCATION.getKey());
+    }
+
+//    @Override
+//    public Optional<String> getPhoneInTextRecords(String contractId) {
+//        return findTextRecords(contractId, GlobalKey.PHONE.getKey());
+//    }
 
     @Override
     public Optional<BigInteger> getLatestBlockNumber() {

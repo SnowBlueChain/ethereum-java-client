@@ -31,6 +31,9 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_CALL_ENS_TEXT_PREFIX = "/eth_call_ens_text_";
     private static final String ETH_CALL_ENS_TEXT_SUFFIX = "_kohorst_eth.json";
 
+    // mocked jason file name of avatar, description, notice, keywords, location, name
+    private static final String ETH_CALL_ENS_TEXT_OTHER_SUFFIX = "_digitalpratik_eth.json";
+
     public String getNetVersion() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + NET_VERSION_JSON_FILE);
     }
@@ -50,6 +53,16 @@ public class FakeEthereumJsonRpcResponseCreator {
     public String getEthCallEnsTextKohorstEth(String keyword) throws IOException, URISyntaxException {
         keyword = keyword.replace('.', '_');
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + keyword + ETH_CALL_ENS_TEXT_SUFFIX);
+    }
+
+    public String getEthCallEnsTextDigitalPratikEth(String keyword) throws IOException, URISyntaxException {
+        keyword = keyword.replace('.', '_');
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + keyword + ETH_CALL_ENS_TEXT_OTHER_SUFFIX);
+    }
+
+    public String getEthCallEnsTextNonExistingDigitalPratikEth(String keyword) throws IOException, URISyntaxException {
+        keyword = keyword.replace('.', '_');
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CALL_ENS_TEXT_PREFIX + "_non_existing_name" + ETH_CALL_ENS_TEXT_OTHER_SUFFIX);
     }
 
     public String getEthCallResolverEns() throws IOException, URISyntaxException {

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.ens.EnsResolutionException;
-import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.http.HttpService;
@@ -35,6 +34,8 @@ public class EnsResolverImplementationUnitTest {
     private final static String NON_EXISTING_ENS_NAME = "nonexistingnameofjklmn.eth";
     private final static boolean HAPPYCASE = true;
     private final static boolean UNHAPPYCASE = false;
+
+    private final static String ENS_NAME_DIGITAL_PRATIK_ETH = "digitalpratik.eth";
 
     // Mock backend service
     private static MockWebServer mockBackEnd;
@@ -133,6 +134,20 @@ public class EnsResolverImplementationUnitTest {
                     new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextNonExistingKohorstEth(key);
         }
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextKohorstEth)
+                .addHeader("Content-Type", "application/json"));
+    }
+
+    // Step 5.1: Set up mocked response for EthCall(digitalpratik.eth) in Text with key = "avatar"
+    private void setupMockedResponseEthCallTextDigitalPratikEth(String key, boolean happycase) throws Exception {
+        String stubbedResponseEthCallEnsTextDigitalPratikEth;
+        if (happycase) {
+            stubbedResponseEthCallEnsTextDigitalPratikEth =
+                    new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextDigitalPratikEth(key);
+        } else {
+            stubbedResponseEthCallEnsTextDigitalPratikEth =
+                    new FakeEthereumJsonRpcResponseCreator().getEthCallEnsTextNonExistingDigitalPratikEth(key);
+        }
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthCallEnsTextDigitalPratikEth)
                 .addHeader("Content-Type", "application/json"));
     }
 
@@ -245,6 +260,90 @@ public class EnsResolverImplementationUnitTest {
     }
 
     @Test
+    void getAvatarInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.AVATAR.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getAvatarInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        assertEquals("eip155:1/erc1155:0x009fe5cbD30f17699E7ee5D6Df73117677aeDE51/1", actual.get());
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
+    void getDescriptionInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.DESCRIPTION.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getDescriptionInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        assertTrue(actual.get().startsWith("Digital Pratik Reminder for you:"));
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
+    void getLocationInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.LOCATION.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getLocationInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        assertEquals("Ahmedabad, Gujarat, India", actual.get());
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
+    void getNoticeInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.NOTICE.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNoticeInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        assertEquals("this is not for sale, okay!", actual.get());
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
     void isSynced_true_happycase() throws Exception {
         // Set up mocked response for eth_sync request
         setupMockedEthSync(HAPPYCASE);
@@ -315,6 +414,7 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
+
 
     @Test
     void findLatestBlockNumber_happycase() throws Exception {

@@ -50,22 +50,22 @@ public interface EnsResolver {
      */
     Optional<String> getGithubInTextRecords(String contractId);
 
-//    /**
-//     * Returns the name of avatar in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a name of avatar account, if any.
-//     */
-//    Optional<String> getAvatarInTextRecords(String contractId);
-//
-//    /**
-//     * Returns the description in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a description, if any.
-//     */
-//    Optional<String> getDescriptionInTextRecords(String contractId);
-//
+    /**
+     * Returns the name of avatar in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a name of avatar account, if any.
+     */
+    Optional<String> getAvatarInTextRecords(String contractId);
+
+    /**
+     * Returns the description in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a description, if any.
+     */
+    Optional<String> getDescriptionInTextRecords(String contractId);
+
 //    /**
 //     * Returns the name of display in text records that's associated with the ENS domain name.
 //     *
@@ -98,22 +98,22 @@ public interface EnsResolver {
 //     */
 //    Optional<String> getMailInTextRecords(String contractId);
 //
-//    /**
-//     * Returns the notice in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a notice, if any.
-//     */
-//    Optional<String> getNoticeInTextRecords(String contractId);
-//
-//    /**
-//     * Returns the location in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a location, if any.
-//     */
-//    Optional<String> getLocationInTextRecords(String contractId);
-//
+    /**
+     * Returns the notice in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a notice, if any.
+     */
+    Optional<String> getNoticeInTextRecords(String contractId);
+
+    /**
+     * Returns the location in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a location, if any.
+     */
+    Optional<String> getLocationInTextRecords(String contractId);
+
 //    /**
 //     * Returns the phone# in text records that's associated with the ENS domain name.
 //     *

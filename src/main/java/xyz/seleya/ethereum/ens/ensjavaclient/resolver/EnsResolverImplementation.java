@@ -236,15 +236,15 @@ public class EnsResolverImplementation implements EnsResolver {
         return findTextRecords(contractId, ServiceKey.GITHUB.getKey());
     }
 
-//    @Override
-//    public Optional<String> getAvatarInTextRecords(@NonNull final String contractId) {
-//        return findTextRecords(contractId, GlobalKey.AVATAR.getKey());
-//    }
-//
-//    @Override
-//    public Optional<String> getDescriptionInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.DESCRIPTION.getKey());
-//    }
+    @Override
+    public Optional<String> getAvatarInTextRecords(@NonNull final String contractId) {
+        return findTextRecords(contractId, GlobalKey.AVATAR.getKey());
+    }
+
+    @Override
+    public Optional<String> getDescriptionInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.DESCRIPTION.getKey());
+    }
 //
 //    @Override
 //    public Optional<String> getDisplayInTextRecords(String contractId) {
@@ -265,16 +265,16 @@ public class EnsResolverImplementation implements EnsResolver {
 //        return findTextRecords(contractId, GlobalKey.MAIL.getKey());
 //    }
 //
-//    @Override
-//    public Optional<String> getNoticeInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.NOTICE.getKey());
-//    }
-//
-//    @Override
-//    public Optional<String> getLocationInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.LOCATION.getKey());
-//    }
-//
+    @Override
+    public Optional<String> getNoticeInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.NOTICE.getKey());
+    }
+
+    @Override
+    public Optional<String> getLocationInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.LOCATION.getKey());
+    }
+
 //    @Override
 //    public Optional<String> getPhoneInTextRecords(String contractId) {
 //        return findTextRecords(contractId, GlobalKey.PHONE.getKey());

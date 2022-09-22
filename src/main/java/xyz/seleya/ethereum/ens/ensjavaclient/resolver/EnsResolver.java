@@ -82,14 +82,14 @@ public interface EnsResolver {
 //     */
 //    Optional<String> getEmailInTextRecords(String contractId);
 //
-//    /**
-//     * Returns the keywords in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return the keywords, if any.
-//     */
-//    Optional<String> getKeywordsInTextRecords(String contractId);
-//
+    /**
+     * Returns the keywords in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return the keywords, if any.
+     */
+    Optional<String> getKeywordsInTextRecords(String contractId);
+
 //    /**
 //     * Returns the mail address in text records that's associated with the ENS domain name.
 //     *
@@ -98,6 +98,16 @@ public interface EnsResolver {
 //     */
 //    Optional<String> getMailInTextRecords(String contractId);
 //
+
+    /**
+     * Returns the name in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a name, if any.
+     */
+    Optional<String> getNameInTextRecords(String contractId);
+
+
     /**
      * Returns the notice in text records that's associated with the ENS domain name.
      *

@@ -250,21 +250,28 @@ public class EnsResolverImplementation implements EnsResolver {
 //    public Optional<String> getDisplayInTextRecords(String contractId) {
 //        return findTextRecords(contractId, GlobalKey.DISPLAY.getKey());
 //    }
+//
 //    @Override
 //    public Optional<String> getEmailInTextRecords(String contractId) {
 //        return findTextRecords(contractId, GlobalKey.EMAIL.getKey());
 //    }
 //
-//    @Override
-//    public Optional<String> getKeywordsInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.KEYWORDS.getKey());
-//    }
-//
+    @Override
+    public Optional<String> getKeywordsInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.KEYWORDS.getKey());
+    }
+
 //    @Override
 //    public Optional<String> getMailInTextRecords(String contractId) {
 //        return findTextRecords(contractId, GlobalKey.MAIL.getKey());
 //    }
 //
+
+    @Override
+    public Optional<String> getNameInTextRecords(String contractId) {
+        return findTextRecords(contractId, GlobalKey.NAME.getKey());
+    }
+
     @Override
     public Optional<String> getNoticeInTextRecords(String contractId) {
         return findTextRecords(contractId, GlobalKey.NOTICE.getKey());

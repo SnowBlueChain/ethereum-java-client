@@ -344,6 +344,51 @@ public class EnsResolverImplementationUnitTest {
     }
 
     @Test
+    void getNameInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.NAME.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNameInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        assertEquals("Digital Pratik", actual.get());
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
+    void getKeywordsInTextRecords_happycase() throws Exception {
+        // Set up mocked response for 1) eth_sync request 2) eth_getBlockByNumber request 3) net_version
+        // 4) resolver 5) text with keyword
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.KEYWORDS.getKey(), HAPPYCASE);
+
+        // trigger the method call that is being tested
+        final Optional<String> actual = ensResolverImplementationTestInstance.getKeywordsInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
+
+        //assertEquals("ens, digital pratik, pratik", actual.get());
+        assertTrue(actual.get().contains("ens"));
+        assertTrue(actual.get().contains("digital pratik"));
+        assertTrue(actual.get().contains("pratik"));
+
+        // Verify the last request to mockBackEnd
+        RecordedRequest lastRecordedRequest = mockBackEnd.takeRequest();
+        Assert.assertTrue("POST".equals(lastRecordedRequest.getMethod()));
+        Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
+    }
+
+    @Test
     void isSynced_true_happycase() throws Exception {
         // Set up mocked response for eth_sync request
         setupMockedEthSync(HAPPYCASE);

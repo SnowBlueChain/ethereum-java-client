@@ -87,6 +87,22 @@ public class EnsResolverImplementationIntegrationTest {
         assertEquals("this is not for sale, okay!", actual.get());
     }
 
+    @Test
+    public void getNameInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNameInTextRecords("digitalpratik.eth");
+        assertEquals("Digital Pratik", actual.get());
+    }
+
+    @Test
+    public void getKeywordsInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getKeywordsInTextRecords("digitalpratik.eth");
+        //assertEquals("ens, digital pratik, pratik", actual.get());
+        assertTrue(actual.get().contains("ens"));
+        assertTrue(actual.get().contains("digital pratik"));
+        assertTrue(actual.get().contains("pratik"));
+
+    }
+
 
     @Test
     public void findContentHash_happycase() {

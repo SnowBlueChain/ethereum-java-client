@@ -7,6 +7,7 @@ public enum GlobalKey {
     EMAIL("email"),
     KEYWORDS("keywords"),
     MAIL("mail"),
+    NAME("name"),
     NOTICE("notice"),
     LOCATION("location"),
     PHONE("phone"),

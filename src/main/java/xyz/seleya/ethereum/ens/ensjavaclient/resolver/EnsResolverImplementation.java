@@ -258,27 +258,27 @@ public class EnsResolverImplementation implements EnsResolver {
     public Optional<String> getDescriptionInTextRecords(String contractId) {
         return findTextRecords(contractId, TextRecordsKey.DESCRIPTION.getKey());
     }
-//
-//    @Override
-//    public Optional<String> getDisplayInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.DISPLAY.getKey());
-//    }
-//
-//    @Override
-//    public Optional<String> getEmailInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.EMAIL.getKey());
-//    }
-//
+
+    @Override
+    public Optional<String> getDisplayInTextRecords(String contractId) {
+        return findTextRecords(contractId, TextRecordsKey.DISPLAY.getKey());
+    }
+
+    @Override
+    public Optional<String> getEmailInTextRecords(String contractId) {
+        return findTextRecords(contractId, TextRecordsKey.EMAIL.getKey());
+    }
+
     @Override
     public Optional<String> getKeywordsInTextRecords(String contractId) {
         return findTextRecords(contractId, TextRecordsKey.KEYWORDS.getKey());
     }
 
-//    @Override
-//    public Optional<String> getMailInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.MAIL.getKey());
-//    }
-//
+    @Override
+    public Optional<String> getMailInTextRecords(String contractId) {
+        return findTextRecords(contractId, TextRecordsKey.MAIL.getKey());
+    }
+
 
     @Override
     public Optional<String> getNameInTextRecords(String contractId) {
@@ -295,10 +295,10 @@ public class EnsResolverImplementation implements EnsResolver {
         return findTextRecords(contractId, TextRecordsKey.LOCATION.getKey());
     }
 
-//    @Override
-//    public Optional<String> getPhoneInTextRecords(String contractId) {
-//        return findTextRecords(contractId, GlobalKey.PHONE.getKey());
-//    }
+    @Override
+    public Optional<String> getPhoneInTextRecords(String contractId) {
+        return findTextRecords(contractId, TextRecordsKey.PHONE.getKey());
+    }
 
 
     @Override

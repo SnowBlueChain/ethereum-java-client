@@ -5,14 +5,14 @@ import java.util.stream.Stream;
 public enum TextRecordsKey {
     AVATAR("avatar"),
     DESCRIPTION("description"),
-//    DISPLAY("display"),
-//    EMAIL("email"),
+    DISPLAY("display"),
+    EMAIL("email"),
     KEYWORDS("keywords"),
-//    MAIL("mail"),
+    MAIL("mail"),
     NAME("name"),
     NOTICE("notice"),
     LOCATION("location"),
-//    PHONE("phone"),
+    PHONE("phone"),
     URL("url"),
     GITHUB("vnd.github"),
     TWITTER("vnd.twitter");

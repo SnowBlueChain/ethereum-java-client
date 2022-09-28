@@ -78,21 +78,15 @@ public class EnsResolverImplementationIntegrationTest {
     }
 
     @Test
-    public void getLocationInTextRecords_happycase() {
-        final Optional<String> actual = ensResolverImplementationTestInstance.getLocationInTextRecords("digitalpratik.eth");
-        assertEquals("Ahmedabad, Gujarat, India", actual.get());
+    public void getDisplayInTextRecord_emptyresultcase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getDisplayInTextRecords("digitalpratik.eth");
+        assertEquals("", actual.get());
     }
 
     @Test
-    public void getNoticeInTextRecords_happycase() {
-        final Optional<String> actual = ensResolverImplementationTestInstance.getNoticeInTextRecords("digitalpratik.eth");
-        assertEquals("this is not for sale, okay!", actual.get());
-    }
-
-    @Test
-    public void getNameInTextRecords_happycase() {
-        final Optional<String> actual = ensResolverImplementationTestInstance.getNameInTextRecords("digitalpratik.eth");
-        assertEquals("Digital Pratik", actual.get());
+    public void getEmailInTextRecord_emptyresultcase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getEmailInTextRecords("digitalpratik.eth");
+        assertEquals("", actual.get());
     }
 
     @Test
@@ -103,6 +97,36 @@ public class EnsResolverImplementationIntegrationTest {
         assertTrue(actual.get().contains("digital pratik"));
         assertTrue(actual.get().contains("pratik"));
 
+    }
+
+    @Test
+    public void getMailInTextRecords_emptyresultcase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getMailInTextRecords("digitalpratik.eth");
+        assertEquals("", actual.get());
+    }
+
+    @Test
+    public void getNameInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNameInTextRecords("digitalpratik.eth");
+        assertEquals("Digital Pratik", actual.get());
+    }
+
+    @Test
+    public void getNoticeInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getNoticeInTextRecords("digitalpratik.eth");
+        assertEquals("this is not for sale, okay!", actual.get());
+    }
+
+    @Test
+    public void getLocationInTextRecords_happycase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getLocationInTextRecords("digitalpratik.eth");
+        assertEquals("Ahmedabad, Gujarat, India", actual.get());
+    }
+
+    @Test
+    public void getPhoneInTextRecords_emptyresultcase() {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getPhoneInTextRecords("digitalpratik.eth");
+        assertEquals("", actual.get());
     }
 
     @Test
@@ -137,7 +161,7 @@ public class EnsResolverImplementationIntegrationTest {
         final Map<String, String> actualMap = ensResolverImplementationTestInstance.getMetadata("digitalpratik.eth");
         Map<String, String> expectedMap = new HashMap<>();
         expectedMap.put("avatar", "eip155:1/erc1155:0x009fe5cbD30f17699E7ee5D6Df73117677aeDE51/1");
-        expectedMap.put("description", "Digital Pratik Reminder for you" );
+        expectedMap.put("description", "Digital Pratik Reminder for you: No matter what, Always keep smiling :)");
         expectedMap.put("display", "Not Found" );
         expectedMap.put("email", "Not Found");
         expectedMap.put("keywords", "ens, digital pratik, pratik" );

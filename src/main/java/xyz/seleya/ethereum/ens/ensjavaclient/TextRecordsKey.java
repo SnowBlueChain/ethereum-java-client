@@ -1,6 +1,8 @@
-package xyz.seleya.ethereum.ens.ensjavaclient.textrecords;
+package xyz.seleya.ethereum.ens.ensjavaclient;
 
-public enum GlobalKey {
+import java.util.stream.Stream;
+
+public enum TextRecordsKey {
     AVATAR("avatar"),
     DESCRIPTION("description"),
     DISPLAY("display"),
@@ -11,14 +13,20 @@ public enum GlobalKey {
     NOTICE("notice"),
     LOCATION("location"),
     PHONE("phone"),
-    URL("url");
+    URL("url"),
+    GITHUB("vnd.github"),
+    TWITTER("vnd.twitter");
 
     String key;
-    GlobalKey(String key) {
+    TextRecordsKey(String key) {
         this.key = key;
     }
 
     public String getKey() {
         return key;
+    }
+
+    public static Stream<TextRecordsKey> stream() {
+        return Stream.of(TextRecordsKey.values());
     }
 }

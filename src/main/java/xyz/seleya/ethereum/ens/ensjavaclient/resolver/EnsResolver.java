@@ -1,7 +1,7 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -66,22 +66,22 @@ public interface EnsResolver {
      */
     Optional<String> getDescriptionInTextRecords(String contractId);
 
-//    /**
-//     * Returns the name of display in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a name of display, if any.
-//     */
-//    Optional<String> getDisplayInTextRecords(String contractId);
-//
-//    /**
-//     * Returns the email in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return an email, if any.
-//     */
-//    Optional<String> getEmailInTextRecords(String contractId);
-//
+    /**
+     * Returns the name of display in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a name of display, if any.
+     */
+    Optional<String> getDisplayInTextRecords(String contractId);
+
+    /**
+     * Returns the email in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return an email, if any.
+     */
+    Optional<String> getEmailInTextRecords(String contractId);
+
     /**
      * Returns the keywords in text records that's associated with the ENS domain name.
      *
@@ -90,14 +90,14 @@ public interface EnsResolver {
      */
     Optional<String> getKeywordsInTextRecords(String contractId);
 
-//    /**
-//     * Returns the mail address in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a mail address, if any.
-//     */
-//    Optional<String> getMailInTextRecords(String contractId);
-//
+    /**
+     * Returns the mail address in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a mail address, if any.
+     */
+    Optional<String> getMailInTextRecords(String contractId);
+
 
     /**
      * Returns the name in text records that's associated with the ENS domain name.
@@ -124,13 +124,22 @@ public interface EnsResolver {
      */
     Optional<String> getLocationInTextRecords(String contractId);
 
-//    /**
-//     * Returns the phone# in text records that's associated with the ENS domain name.
-//     *
-//     * @param contractId an ENS domain name.
-//     * @return a phone#, if any.
-//     */
-//    Optional<String> getPhoneInTextRecords(String contractId);
+    /**
+     * Returns the phone# in text records that's associated with the ENS domain name.
+     *
+     * @param contractId an ENS domain name.
+     * @return a phone#, if any.
+     */
+    Optional<String> getPhoneInTextRecords(String contractId);
+
+    /**
+     * Returns all the information in textrecords.
+     *
+     * @param contractId an ENS domain name (a.k.a. ensName).
+     * @return a map if any. The key is the keyword in textrecords and value is the corresponding result.
+     */
+    Map<String, String> getMetadata(String contractId);
+
 
     /**
      * Returns the latest block number.

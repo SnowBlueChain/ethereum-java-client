@@ -24,7 +24,6 @@ import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
-import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
 import java.math.BigInteger;

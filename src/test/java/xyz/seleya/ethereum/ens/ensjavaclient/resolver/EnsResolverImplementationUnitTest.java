@@ -16,14 +16,16 @@ import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
-import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
-import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
+import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
@@ -168,7 +170,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.URL.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getUrlInTextRecords(ENS_NAME_KOHORST_ETH);
@@ -190,7 +192,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.URL.getKey(), HAPPYCASE);
 
         Executable executable = () -> ensResolverImplementationTestInstance.getUrlInTextRecords(NON_ENS_NAME_HELLO_COM);
         Assertions.assertThrows(EnsResolutionException.class, executable);
@@ -208,7 +210,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(UNHAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(GlobalKey.URL.getKey(), UNHAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.URL.getKey(), UNHAPPYCASE);
 
         Optional<String> actual = ensResolverImplementationTestInstance.getUrlInTextRecords(NON_EXISTING_ENS_NAME);
         Assertions.assertEquals(Optional.empty(), actual);
@@ -223,7 +225,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.TWITTER.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getTwitterInTextRecords(ENS_NAME_KOHORST_ETH);
@@ -246,7 +248,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(ServiceKey.GITHUB.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.GITHUB.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getGithubInTextRecords(ENS_NAME_KOHORST_ETH);
@@ -267,7 +269,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.AVATAR.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.AVATAR.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getAvatarInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -288,7 +290,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.DESCRIPTION.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.DESCRIPTION.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getDescriptionInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -309,7 +311,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.LOCATION.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.LOCATION.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getLocationInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -330,7 +332,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.NOTICE.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.NOTICE.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getNoticeInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -351,7 +353,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.NAME.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.NAME.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getNameInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -372,7 +374,7 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextDigitalPratikEth(GlobalKey.KEYWORDS.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.KEYWORDS.getKey(), HAPPYCASE);
 
         // trigger the method call that is being tested
         final Optional<String> actual = ensResolverImplementationTestInstance.getKeywordsInTextRecords(ENS_NAME_DIGITAL_PRATIK_ETH);
@@ -448,9 +450,9 @@ public class EnsResolverImplementationUnitTest {
         setupResponseBlockNumber();
         setupResponseNetVersion ();
         setupMockedResponseEthCallResolver(HAPPYCASE);
-        setupMockedResponseEthCallTextKohorstEth(ServiceKey.TWITTER.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.TWITTER.getKey(), HAPPYCASE);
 
-        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, ServiceKey.TWITTER.getKey());
+        final Optional<String> actual = ensResolverImplementationTestInstance.findTextRecords(ENS_NAME_KOHORST_ETH, TextRecordsKey.TWITTER.getKey());
 
         assertEquals("KohorstLucas", actual.get());
 
@@ -471,5 +473,53 @@ public class EnsResolverImplementationUnitTest {
         BigInteger actualResult = actual.get();
         final int result = expected.compareTo(actualResult);
         Assert.assertTrue(result <= 0);
+    }
+
+
+    @Test
+    public void getMetaData_happycase() throws Exception {
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.AVATAR.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.DESCRIPTION.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.KEYWORDS.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.LOCATION.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.NAME.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.NOTICE.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextDigitalPratikEth(TextRecordsKey.LOCATION.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.URL.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.GITHUB.getKey(), HAPPYCASE);
+        setupMockedResponseEthCallTextKohorstEth(TextRecordsKey.TWITTER.getKey(), HAPPYCASE);
+
+
+        final Map<String, String> actualMap = ensResolverImplementationTestInstance.getMetadata("digitalpratik.eth");
+        Map<String, String> expectedMap = new HashMap<>();
+        expectedMap.put("avatar", "eip155:1/erc1155:0x009fe5cbD30f17699E7ee5D6Df73117677aeDE51/1");
+        expectedMap.put("description", "Digital Pratik Reminder for you" );
+
+
+        expectedMap.put("display", "Not Found" );
+        expectedMap.put("email", "Not Found");
+        expectedMap.put("keywords", "ens, digital pratik, pratik" );
+        expectedMap.put("mail","Not Found" );
+        expectedMap.put("name", "Digital Pratik");
+        expectedMap.put("notice", "this is not for sale, okay!" );
+        expectedMap.put("location","Ahmedabad, Gujarat, India");
+        expectedMap.put("phone", "Not Found");
+        expectedMap.put("url","https://lucaskohorst.com");
+        expectedMap.put("vnd.github","Kohorst-Lucas");
+        expectedMap.put("vnd.twitter", "KohorstLucas" );
+
+        for(String keyword : actualMap.keySet()) {
+            System.out.println("Keyword is : " + keyword);
+            if (keyword.equals("description")) {
+                assertTrue(actualMap.get(keyword).startsWith("Digital Pratik Reminder for you"));
+            } else {
+                assertEquals(expectedMap.get(keyword), actualMap.get(keyword));
+            }
+        }
     }
 }

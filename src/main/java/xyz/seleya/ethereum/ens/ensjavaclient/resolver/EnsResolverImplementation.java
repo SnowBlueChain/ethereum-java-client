@@ -5,6 +5,7 @@ import io.ipfs.cid.Cid;
 import io.ipfs.multihash.Multihash;
 import org.slf4j.Logger;
 import org.springframework.lang.NonNull;
+import org.springframework.util.StringUtils;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.Contracts;
@@ -22,12 +23,13 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
-import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.GlobalKey;
+import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
 import xyz.seleya.ethereum.ens.ensjavaclient.textrecords.ServiceKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -43,11 +45,14 @@ public class EnsResolverImplementation implements EnsResolver {
     private final TransactionManager transactionManager;
     private long syncThreshold; // non-final in case this value needs to be tweaked
 
+    private final Map<String, PublicResolver> ensNameToEthereumResolver;
+
     private EnsResolverImplementation(Web3j web3j, long syncThreshold, int addressLength) {
         this.web3j = web3j;
         this.syncThreshold = syncThreshold;
         this.addressLength = addressLength;
         this.transactionManager = new ClientTransactionManager(web3j, null); // don't use empty string
+        this.ensNameToEthereumResolver = new HashMap<>();
     }
 
     private EnsResolverImplementation(Web3j web3j, long syncThreshold) {
@@ -180,6 +185,10 @@ public class EnsResolverImplementation implements EnsResolver {
 
     @VisibleForTesting
     PublicResolver lookupResolver(String ensName) throws EnsResolutionException {
+        // Send back the eth resolver if we have it in the map of ensNameToEthereumResolver.
+        if (ensNameToEthereumResolver.containsKey(ensName)) {
+            return ensNameToEthereumResolver.get(ensName);
+        }
         if (isValidEnsName(ensName)) {
             try {
                 if (!isSynced()) {
@@ -194,8 +203,12 @@ public class EnsResolverImplementation implements EnsResolver {
                     byte[] nameHash = NameHash.nameHashAsBytes(ensName);
                     String resolverAddress = ensRegistry.resolver(nameHash).send();
 
-                    return PublicResolver.load(
+                    PublicResolver ensResolver =  PublicResolver.load(
                             resolverAddress, web3j, transactionManager, new DefaultGasProvider());
+
+                    // save the resolver to map of ensNameToEthereumResolver then return the resolver
+                    ensNameToEthereumResolver.put(ensName, ensResolver);
+                    return ensResolver;
                 }
             } catch (Exception e) {
                 throw new EnsResolutionException("Unable to determine sync status of node", e);
@@ -211,9 +224,9 @@ public class EnsResolverImplementation implements EnsResolver {
         PublicResolver resolver = lookupResolver(ethDomainName);
         byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
         try {
-            Optional<String> textRecord = Optional.ofNullable(resolver.text(nameHash, keyword).send());
-            log.info("text record - " + keyword + " : " + textRecord);
-            return textRecord;
+                Optional<String> textRecord = Optional.ofNullable(resolver.text(nameHash, keyword).send());
+                log.info("text record - " + keyword + " : " + textRecord);
+                return textRecord;
         } catch (Exception e) {
             //throw new RuntimeException("Unable to execute Ethereum request", e);
             return Optional.empty();
@@ -223,27 +236,27 @@ public class EnsResolverImplementation implements EnsResolver {
     // text records getter methods of url, vnd.twitter, and vnd.github
     @Override
     public Optional<String> getUrlInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, GlobalKey.URL.getKey());
+        return findTextRecords(contractId, TextRecordsKey.URL.getKey());
     }
 
     @Override
     public Optional<String> getTwitterInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, ServiceKey.TWITTER.getKey());
+        return findTextRecords(contractId, TextRecordsKey.TWITTER.getKey());
     }
 
     @Override
     public Optional<String> getGithubInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, ServiceKey.GITHUB.getKey());
+        return findTextRecords(contractId, TextRecordsKey.GITHUB.getKey());
     }
 
     @Override
     public Optional<String> getAvatarInTextRecords(@NonNull final String contractId) {
-        return findTextRecords(contractId, GlobalKey.AVATAR.getKey());
+        return findTextRecords(contractId, TextRecordsKey.AVATAR.getKey());
     }
 
     @Override
     public Optional<String> getDescriptionInTextRecords(String contractId) {
-        return findTextRecords(contractId, GlobalKey.DESCRIPTION.getKey());
+        return findTextRecords(contractId, TextRecordsKey.DESCRIPTION.getKey());
     }
 //
 //    @Override
@@ -258,7 +271,7 @@ public class EnsResolverImplementation implements EnsResolver {
 //
     @Override
     public Optional<String> getKeywordsInTextRecords(String contractId) {
-        return findTextRecords(contractId, GlobalKey.KEYWORDS.getKey());
+        return findTextRecords(contractId, TextRecordsKey.KEYWORDS.getKey());
     }
 
 //    @Override
@@ -269,23 +282,42 @@ public class EnsResolverImplementation implements EnsResolver {
 
     @Override
     public Optional<String> getNameInTextRecords(String contractId) {
-        return findTextRecords(contractId, GlobalKey.NAME.getKey());
+        return findTextRecords(contractId, TextRecordsKey.NAME.getKey());
     }
 
     @Override
     public Optional<String> getNoticeInTextRecords(String contractId) {
-        return findTextRecords(contractId, GlobalKey.NOTICE.getKey());
+        return findTextRecords(contractId, TextRecordsKey.NOTICE.getKey());
     }
 
     @Override
     public Optional<String> getLocationInTextRecords(String contractId) {
-        return findTextRecords(contractId, GlobalKey.LOCATION.getKey());
+        return findTextRecords(contractId, TextRecordsKey.LOCATION.getKey());
     }
 
 //    @Override
 //    public Optional<String> getPhoneInTextRecords(String contractId) {
 //        return findTextRecords(contractId, GlobalKey.PHONE.getKey());
 //    }
+
+
+    @Override
+    public Map<String, String> getMetadata(String contractId) {
+        Map<String, String> metaMap = new HashMap<>();
+        for(TextRecordsKey textrecordsKey : TextRecordsKey.values()) {
+            log.info("textrecordsKey: " + textrecordsKey);
+            String keyword = textrecordsKey.getKey();
+            Optional<String> resultOptional = findTextRecords(contractId, keyword);
+            if (resultOptional.isPresent()) {
+                if (resultOptional.get().isBlank()) {
+                    metaMap.put(keyword, "Not Found");
+                } else {
+                    metaMap.put(keyword, resultOptional.get());
+                }
+            }
+        }
+        return metaMap;
+    }
 
     @Override
     public Optional<BigInteger> getLatestBlockNumber() {

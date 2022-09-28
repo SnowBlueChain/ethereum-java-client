@@ -1,7 +1,7 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
 import java.math.BigInteger;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -131,6 +131,15 @@ public interface EnsResolver {
 //     * @return a phone#, if any.
 //     */
 //    Optional<String> getPhoneInTextRecords(String contractId);
+
+    /**
+     * Returns all the information in textrecords.
+     *
+     * @param contractId an ENS domain name (a.k.a. ensName).
+     * @return a map if any. The key is the keyword in textrecords and value is the corresponding result.
+     */
+    Map<String, String> getMetadata(String contractId);
+
 
     /**
      * Returns the latest block number.

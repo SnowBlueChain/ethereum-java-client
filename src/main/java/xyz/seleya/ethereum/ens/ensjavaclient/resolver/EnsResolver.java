@@ -148,4 +148,13 @@ public interface EnsResolver {
      */
     Optional<BigInteger> getLatestBlockNumber();
 
+    /**
+     * Returns the current gas price.
+     *
+     * @return the gas price from the most recent block on Ethereum mainnet.
+     */
+    Optional<BigInteger> getGasPrice();
+
+
+
 }

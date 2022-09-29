@@ -160,6 +160,12 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
     }
 
+    // Set up for Eth Gas Price
+    public void setupMockedResponseEthGasPrice() throws Exception {
+        String stubbedResponseEthGasPrice = new FakeEthereumJsonRpcResponseCreator().getEthGasPriceJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthGasPrice)
+                .addHeader("Content-Type", "application/json"));
+    }
 
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
@@ -550,7 +556,6 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue("/".equals(lastRecordedRequest.getPath()));
     }
 
-
     @Test
     void findLatestBlockNumber_happycase() throws Exception {
         setupMockedResponseEthLatestBlockNumber();
@@ -563,8 +568,6 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue(result <= 0);
     }
 
-
-    // TODO
     @Test
     public void getMetaData_happycase() throws Exception {
         setupMockedEthSync(HAPPYCASE);
@@ -613,5 +616,17 @@ public class EnsResolverImplementationUnitTest {
                 assertEquals(expectedMap.get(keyword), actualMap.get(keyword));
             }
         }
+    }
+
+    @Test
+    void getGasPrice_happycase() throws Exception {
+        setupMockedResponseEthGasPrice();
+
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getGasPrice();
+        final BigInteger expected = new BigInteger("0");
+        Assert.assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        final int result = expected.compareTo(actualResult);
+        Assert.assertTrue(result <= 0);
     }
 }

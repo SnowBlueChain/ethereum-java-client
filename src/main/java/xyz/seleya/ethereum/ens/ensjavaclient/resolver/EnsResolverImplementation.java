@@ -13,10 +13,7 @@ import org.web3j.ens.EnsResolutionException;
 import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.methods.response.EthBlock;
-import org.web3j.protocol.core.methods.response.EthBlockNumber;
-import org.web3j.protocol.core.methods.response.EthSyncing;
-import org.web3j.protocol.core.methods.response.NetVersion;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
@@ -325,6 +322,20 @@ public class EnsResolverImplementation implements EnsResolver {
             final EthBlockNumber blockNumber = web3j.ethBlockNumber().send();
             Optional<BigInteger> result = Optional.ofNullable(blockNumber.getBlockNumber());
             log.info("Latest block number on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error whilst sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public Optional<BigInteger> getGasPrice() {
+        try {
+            // eth_blockNumber returns the number of most recent block.
+            final EthGasPrice gasPrice = web3j.ethGasPrice().send();
+            Optional<BigInteger> result = Optional.ofNullable(gasPrice.getGasPrice());
+            log.info("Current gas price on ethereum :" + result);
             return result;
         } catch (IOException ex) {
             log.error("Error whilst sending json-rpc requests: " + ex);

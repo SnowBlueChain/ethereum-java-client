@@ -23,6 +23,7 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_GET_BLOCK_BY_NUMBER_JSON_FILE = "/eth_getBlockByNumber.json";
     private static final String ETH_CALL_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_ens.json";
     private static final String ETH_LATEST_BLOCK_NUMBER_JSON_FILE = "/eth_latest_block_number_happycase.json";
+    private static final String ETH_GAS_PRICE_JSON_FILE = "/eth_gas_price_happycase.json";
 
     // mocked jason file name of non-existing ens name
     private static final String ETH_CALL_NON_EXISTING_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_non_existing_ens.json";
@@ -83,6 +84,9 @@ public class FakeEthereumJsonRpcResponseCreator {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_LATEST_BLOCK_NUMBER_JSON_FILE);
     }
 
+    public String getEthGasPriceJsonFile() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GAS_PRICE_JSON_FILE);
+    }
 
     // Convert JSON file to String
     private String getInfoResponse (String filename) throws IOException, URISyntaxException {

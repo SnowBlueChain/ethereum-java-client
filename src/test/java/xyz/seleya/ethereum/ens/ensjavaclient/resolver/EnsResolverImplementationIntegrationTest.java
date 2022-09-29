@@ -182,4 +182,12 @@ public class EnsResolverImplementationIntegrationTest {
             }
         }
     }
+    @Test
+    public void getGasPrice_happycase() throws Exception {
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getGasPrice();
+        BigInteger expected = new BigInteger("13020289782");
+        assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        assertTrue(actualResult.compareTo(new BigInteger("0")) > 0);
+    }
 }

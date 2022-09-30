@@ -167,6 +167,13 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
     }
 
+    // Set up for Eth Client Version
+    public void setupMockedResponseEthClientVersion() throws Exception {
+        String stubbedResponseEthClientVersion = new FakeEthereumJsonRpcResponseCreator().getEthClientVersionJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthClientVersion)
+                .addHeader("Content-Type", "application/json"));
+    }
+
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
         // Set up mocked response for
@@ -628,5 +635,16 @@ public class EnsResolverImplementationUnitTest {
         BigInteger actualResult = actual.get();
         final int result = expected.compareTo(actualResult);
         Assert.assertTrue(result <= 0);
+    }
+
+    @Test
+    void getClientVersion_happycase() throws Exception {
+        setupMockedResponseEthClientVersion();
+
+        final Optional<String> actual = ensResolverImplementationTestInstance.getCurrentClientVersion();
+        final String expected = "Geth/v1.10.23-omnibus-b38477ec/linux-amd64/go1.18.5";
+        Assert.assertTrue(actual.isPresent());
+        String actualResult = actual.get();
+        assertEquals(expected, actualResult);
     }
 }

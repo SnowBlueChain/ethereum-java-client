@@ -155,6 +155,13 @@ public interface EnsResolver {
      */
     Optional<BigInteger> getGasPrice();
 
+    /**
+     * Returns the current client.
+     *
+     * @return the current client version from the most recent block on Ethereum mainnet.
+     */
+    Optional<String> getCurrentClientVersion();
+
 
 
 }

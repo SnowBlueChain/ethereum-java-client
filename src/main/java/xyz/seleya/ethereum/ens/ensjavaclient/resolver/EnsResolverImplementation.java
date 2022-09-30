@@ -332,10 +332,24 @@ public class EnsResolverImplementation implements EnsResolver {
     @Override
     public Optional<BigInteger> getGasPrice() {
         try {
-            // eth_blockNumber returns the number of most recent block.
+            // gasPrice returns the number of current eth Gas Price.
             final EthGasPrice gasPrice = web3j.ethGasPrice().send();
             Optional<BigInteger> result = Optional.ofNullable(gasPrice.getGasPrice());
             log.info("Current gas price on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error whilst sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public Optional<String> getCurrentClientVersion() {
+        try {
+            // clientVersion returns the current web3j client version.
+            final Web3ClientVersion clientVersion = web3j.web3ClientVersion().send();
+            Optional<String> result = Optional.ofNullable(clientVersion.getWeb3ClientVersion());
+            log.info("Current client version on ethereum :" + result);
             return result;
         } catch (IOException ex) {
             log.error("Error whilst sending json-rpc requests: " + ex);

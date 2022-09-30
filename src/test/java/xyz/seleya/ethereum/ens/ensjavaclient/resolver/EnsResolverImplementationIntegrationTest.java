@@ -190,4 +190,13 @@ public class EnsResolverImplementationIntegrationTest {
         BigInteger actualResult = actual.get();
         assertTrue(actualResult.compareTo(new BigInteger("0")) > 0);
     }
+
+    @Test
+    public void getCurrentClientVersion_happycase() throws Exception {
+        final Optional<String> actual = ensResolverImplementationTestInstance.getCurrentClientVersion();
+        String expected = "Geth/v1.10.23-omnibus-b38477ec/linux-amd64/go1.18.5";
+        assertTrue(actual.isPresent());
+        String actualResult = actual.get();
+        assertEquals(expected, actualResult);
+    }
 }

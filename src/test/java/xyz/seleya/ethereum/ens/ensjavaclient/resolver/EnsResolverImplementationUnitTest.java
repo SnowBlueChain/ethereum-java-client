@@ -174,6 +174,12 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
     }
 
+    // Set up for Eth Net Peer Count
+    public void setupMockedResponseEthNetPeerCount() throws Exception {
+        String stubbedResponseEthNetPeerCount = new FakeEthereumJsonRpcResponseCreator().getNetPeerCountJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthNetPeerCount)
+                .addHeader("Content-Type", "application/json"));
+    }
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
         // Set up mocked response for
@@ -646,5 +652,17 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue(actual.isPresent());
         String actualResult = actual.get();
         assertEquals(expected, actualResult);
+    }
+
+    @Test
+    void getNetPeerCount_happycase() throws Exception {
+        setupMockedResponseEthNetPeerCount();
+
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getNetPeerCount();
+        final BigInteger expect = new BigInteger("100");
+        Assert.assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        Assert.assertTrue(actualResult.compareTo(new BigInteger("0")) >= 0);
+
     }
 }

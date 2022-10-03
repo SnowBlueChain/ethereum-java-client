@@ -199,4 +199,13 @@ public class EnsResolverImplementationIntegrationTest {
         String actualResult = actual.get();
         assertEquals(expected, actualResult);
     }
+
+    @Test
+    public void getNetPeerCount_happycase() throws Exception {
+        final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getNetPeerCount();
+        BigInteger expected = new BigInteger("100");
+        assertTrue(actual.isPresent());
+        BigInteger actualResult = actual.get();
+        assertTrue(actualResult.compareTo(new BigInteger("0")) >= 0);
+    }
 }

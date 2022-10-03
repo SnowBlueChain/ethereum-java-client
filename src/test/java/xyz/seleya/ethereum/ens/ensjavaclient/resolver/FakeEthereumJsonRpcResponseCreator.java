@@ -25,6 +25,7 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_LATEST_BLOCK_NUMBER_JSON_FILE = "/eth_latest_block_number_happycase.json";
     private static final String ETH_GAS_PRICE_JSON_FILE = "/eth_gas_price_happycase.json";
     private static final String ETH_CLIENT_VERSION_JSON_FILE = "/eth_client_version_happycase.json";
+    private static final String ETH_NET_PEER_COUNT_JSON_FILE = "/eth_net_peer_count_happycase.json";
 
     // mocked jason file name of non-existing ens name
     private static final String ETH_CALL_NON_EXISTING_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_non_existing_ens.json";
@@ -91,6 +92,10 @@ public class FakeEthereumJsonRpcResponseCreator {
 
     public String getEthClientVersionJsonFile() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_CLIENT_VERSION_JSON_FILE);
+    }
+
+    public String getNetPeerCountJsonFile() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_NET_PEER_COUNT_JSON_FILE);
     }
 
     // Convert JSON file to String

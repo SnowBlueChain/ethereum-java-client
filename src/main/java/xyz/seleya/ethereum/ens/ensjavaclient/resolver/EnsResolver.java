@@ -156,12 +156,17 @@ public interface EnsResolver {
     Optional<BigInteger> getGasPrice();
 
     /**
-     * Returns the current client.
+     * Returns the number of peers currently connected to the client.
      *
-     * @return the current client version from the most recent block on Ethereum mainnet.
+     * @return the number of peers currently connected to the client on Ethereum mainnet.
      */
     Optional<String> getCurrentClientVersion();
 
-
+    /**
+     * Returns the number of peer count.
+     *
+     * @return the number of peer count from the most recent block on Ethereum mainnet.
+     */
+    Optional<BigInteger> getNetPeerCount();
 
 }

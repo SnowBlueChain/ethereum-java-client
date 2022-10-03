@@ -356,4 +356,18 @@ public class EnsResolverImplementation implements EnsResolver {
             throw new RuntimeException("Error whilst sending json-rpc requests", ex);
         }
     }
+
+    @Override
+    public Optional<BigInteger> getNetPeerCount() {
+        try{
+            // netPeerCount returns the number of peers currently connected to the client.
+            final NetPeerCount netPeerCount = web3j.netPeerCount().send();
+            Optional<BigInteger> result = Optional.ofNullable(netPeerCount.getQuantity());
+            log.info("Current peer count on etherereum :" + result);
+            return result;
+        } catch ( IOException ex) {
+            log.error("Error whilst sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+        }
+    }
 }

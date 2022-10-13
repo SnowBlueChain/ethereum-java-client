@@ -12,8 +12,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.web3j.ens.EnsResolutionException;
 import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 
+import javax.swing.plaf.metal.OceanTheme;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -207,5 +210,17 @@ public class EnsResolverImplementationIntegrationTest {
         assertTrue(actual.isPresent());
         BigInteger actualResult = actual.get();
         assertTrue(actualResult.compareTo(new BigInteger("0")) >= 0);
+    }
+
+    @Test
+    public void getBalance_happycase() throws Exception {
+        String ensName = "kohorst.eth";
+        String address = ensResolverImplementationTestInstance.resolve(ensName);
+        final EthGetBalance actualEthBalance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
+        final BigInteger actualBalance = actualEthBalance.getBalance();
+        //System.out.println("actualBalance = " + actualBalance);
+
+        BigInteger expected = new BigInteger("8636179763969940");
+        assertEquals(expected, actualBalance);
     }
 }

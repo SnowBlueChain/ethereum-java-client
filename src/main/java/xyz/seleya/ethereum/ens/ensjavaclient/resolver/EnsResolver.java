@@ -169,4 +169,13 @@ public interface EnsResolver {
      */
     Optional<BigInteger> getNetPeerCount();
 
+
+    /**
+     * Returns the balance of the account of given address.
+     * @param ensName an ENS domain name.
+     *
+     * @return Returns the balance of the account of given address.
+     */
+    Optional<BigInteger> getBalance(String ensName);
+
 }

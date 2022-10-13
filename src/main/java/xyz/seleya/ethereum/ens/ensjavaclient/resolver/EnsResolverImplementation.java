@@ -12,6 +12,7 @@ import org.web3j.ens.Contracts;
 import org.web3j.ens.EnsResolutionException;
 import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.ClientTransactionManager;
@@ -324,8 +325,8 @@ public class EnsResolverImplementation implements EnsResolver {
             log.info("Latest block number on ethereum :" + result);
             return result;
         } catch (IOException ex) {
-            log.error("Error whilst sending json-rpc requests: " + ex);
-            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
     }
 
@@ -338,8 +339,8 @@ public class EnsResolverImplementation implements EnsResolver {
             log.info("Current gas price on ethereum :" + result);
             return result;
         } catch (IOException ex) {
-            log.error("Error whilst sending json-rpc requests: " + ex);
-            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
     }
 
@@ -352,8 +353,8 @@ public class EnsResolverImplementation implements EnsResolver {
             log.info("Current client version on ethereum :" + result);
             return result;
         } catch (IOException ex) {
-            log.error("Error whilst sending json-rpc requests: " + ex);
-            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
     }
 
@@ -363,11 +364,32 @@ public class EnsResolverImplementation implements EnsResolver {
             // netPeerCount returns the number of peers currently connected to the client.
             final NetPeerCount netPeerCount = web3j.netPeerCount().send();
             Optional<BigInteger> result = Optional.ofNullable(netPeerCount.getQuantity());
-            log.info("Current peer count on etherereum :" + result);
+            log.info("Current peer count on ethereum :" + result);
             return result;
-        } catch ( IOException ex) {
-            log.error("Error whilst sending json-rpc requests: " + ex);
-            throw new RuntimeException("Error whilst sending json-rpc requests", ex);
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public Optional<BigInteger> getBalance(String ensName) {
+        String address = resolve(ensName);
+        String blockNumber = "latest";
+
+        // Determine if it is a valid address.
+        if (address == null || !address.startsWith("0x")) {
+            return null;
+        }
+
+        try {
+            final EthGetBalance ethGetBalance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf(blockNumber)).send();
+            Optional<BigInteger> result = Optional.ofNullable(ethGetBalance.getBalance());
+            log.info("Current balance on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
     }
 }

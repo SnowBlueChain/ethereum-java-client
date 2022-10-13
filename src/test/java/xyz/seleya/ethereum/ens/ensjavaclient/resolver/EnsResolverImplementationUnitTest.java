@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.web3j.ens.EnsResolutionException;
 import org.web3j.protocol.Web3j;
 
+import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
 import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
@@ -180,6 +182,26 @@ public class EnsResolverImplementationUnitTest {
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthNetPeerCount)
                 .addHeader("Content-Type", "application/json"));
     }
+
+    // Set up for Eth Balance
+    public void setupMockedResponseEthBalance() throws Exception {
+        String stubbedResponseEthBalance = new FakeEthereumJsonRpcResponseCreator().getEthBalanceJsonFile();;
+        mockBackEnd.enqueue((new MockResponse().setBody(stubbedResponseEthBalance)
+                    .addHeader("Content-Type", "application/json")));
+    }
+
+    private void setupMockedResponseEthResolveAddress(boolean happycase) throws Exception {
+        String stubbedResponseEthResolverAddress;
+        if (happycase) {
+            stubbedResponseEthResolverAddress = new FakeEthereumJsonRpcResponseCreator().getEthResolveAddress();
+        } else {
+            // Set up mocked response for ens_resolver OF NON-EXISTING ENS NAME
+            stubbedResponseEthResolverAddress = new FakeEthereumJsonRpcResponseCreator().getEthCallResolverNonExistingEns();
+        }
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthResolverAddress)
+                .addHeader("Content-Type", "application/json"));
+    }
+
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
         // Set up mocked response for
@@ -663,6 +685,24 @@ public class EnsResolverImplementationUnitTest {
         Assert.assertTrue(actual.isPresent());
         BigInteger actualResult = actual.get();
         Assert.assertTrue(actualResult.compareTo(new BigInteger("0")) >= 0);
+
+    }
+
+    @Test
+    void getEthBalance_happycase() throws Exception {
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthResolveAddress(HAPPYCASE);
+        setupMockedResponseEthBalance();
+
+        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
+        final EthGetBalance actualEthBalance = web3jTestInstance.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
+        final BigInteger actualBalance = actualEthBalance.getBalance();
+
+        final BigInteger expect = new BigInteger("8636179763969940");
+        assertEquals(expect, actualBalance);
 
     }
 }

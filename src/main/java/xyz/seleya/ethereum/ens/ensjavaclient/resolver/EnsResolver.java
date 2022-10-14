@@ -189,4 +189,14 @@ public interface EnsResolver {
      */
     List<EthLogInfo> getLogs(String ensName);
 
+    /**
+     * Returns the number of transactions sent from an address.
+     * @param ensName an ENS domain name.
+     *
+     * @return Returns a hex code of the integer representing the number of transactions sent from this address.
+     */
+    Optional<BigInteger> getTransactionCount(String ensName);
+
+
+
 }

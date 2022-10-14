@@ -406,11 +406,11 @@ public class EnsResolverImplementation implements EnsResolver {
         try {
             final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
             List<EthLog.LogResult> result = ethLog.getLogs();
-            EthLogInfo ethLogInfo = new EthLogInfo();
             List<EthLogInfo> ethLogInfoList = new ArrayList<>();
 
             for (EthLog.LogResult ethLogResult : result) {
                 EthLog.LogObject logObject = (EthLog.LogObject) ethLogResult.get();
+                EthLogInfo ethLogInfo = new EthLogInfo();
                 ethLogInfo.setAddress(logObject.getAddress());
                 ethLogInfo.setBlockHash(logObject.getBlockHash());
                 ethLogInfo.setBlockNumber(logObject.getBlockNumber());

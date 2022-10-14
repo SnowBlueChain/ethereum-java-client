@@ -185,7 +185,7 @@ public interface EnsResolver {
      * Returns an array of all logs matching a given filter object.
      * @param ensName an ENS domain name.
      *
-     * @return Returns an array of all logs matching a given filter object.
+     * @return Returns a list of all logs matching a given filter object.
      */
     List<EthLogInfo> getLogs(String ensName);
 

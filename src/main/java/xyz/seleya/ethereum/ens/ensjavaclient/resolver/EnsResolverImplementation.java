@@ -381,7 +381,6 @@ public class EnsResolverImplementation implements EnsResolver {
         if (address == null || !address.startsWith("0x")) {
             return null;
         }
-
         try {
             final EthGetBalance ethGetBalance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf(blockNumber)).send();
             Optional<BigInteger> result = Optional.ofNullable(ethGetBalance.getBalance());
@@ -398,16 +397,13 @@ public class EnsResolverImplementation implements EnsResolver {
         String address = resolve(ensName);
         String fromBlock = "earliest";
         EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf(fromBlock), null, address);
-
         if (address == null || !address.startsWith("0x")) {
             return null;
         }
-
         try {
             final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
             List<EthLog.LogResult> result = ethLog.getLogs();
             List<EthLogInfo> ethLogInfoList = new ArrayList<>();
-
             for (EthLog.LogResult ethLogResult : result) {
                 EthLog.LogObject logObject = (EthLog.LogObject) ethLogResult.get();
                 EthLogInfo ethLogInfo = new EthLogInfo();
@@ -422,9 +418,26 @@ public class EnsResolverImplementation implements EnsResolver {
                 ethLogInfo.setTransactionIndex(logObject.getTransactionIndex());
                 ethLogInfoList.add(ethLogInfo);
             }
-
             log.info("All logs matching a given filter object on ethereum :" + result);
             return ethLogInfoList;
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public Optional<BigInteger> getTransactionCount(String ensName) {
+        String address = resolve(ensName);
+        String blockNumber = "latest";
+        if (address == null || !address.startsWith("0x")) {
+            return null;
+        }
+        try {
+            final EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameter.valueOf(blockNumber)).send();
+            Optional<BigInteger> result = Optional.ofNullable(ethGetTransactionCount.getTransactionCount());
+            log.info("The latest transaction count on ethereum :" + result);
+            return result;
         } catch (IOException ex) {
             log.error("Error while sending json-rpc requests: " + ex);
             throw new RuntimeException("Error while sending json-rpc requests", ex);

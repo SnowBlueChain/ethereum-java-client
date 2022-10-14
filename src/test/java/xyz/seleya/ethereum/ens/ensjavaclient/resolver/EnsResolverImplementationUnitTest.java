@@ -17,6 +17,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
@@ -212,6 +213,12 @@ public class EnsResolverImplementationUnitTest {
                 .addHeader("Content-Type", "application/json"));
     }
 
+
+    private void setupMockedResponseEthGetTransactionCount() throws Exception {
+        String stubbedResponseEthGetTransactionCount = new FakeEthereumJsonRpcResponseCreator().getEthGetTransactionCountJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthGetTransactionCount)
+                .addHeader("Content-Type", "application/json"));
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -694,7 +701,7 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthNetPeerCount();
 
         final Optional<BigInteger> actual = ensResolverImplementationTestInstance.getNetPeerCount();
-        final BigInteger expect = new BigInteger("100");
+        final BigInteger expected = new BigInteger("100");
         Assert.assertTrue(actual.isPresent());
         BigInteger actualResult = actual.get();
         Assert.assertTrue(actualResult.compareTo(new BigInteger("0")) >= 0);
@@ -714,8 +721,8 @@ public class EnsResolverImplementationUnitTest {
         final EthGetBalance actualEthBalance = web3jTestInstance.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
         final BigInteger actualBalance = actualEthBalance.getBalance();
 
-        final BigInteger expect = new BigInteger("8636179763969940");
-        assertEquals(expect, actualBalance);
+        final BigInteger expected = new BigInteger("8636179763969940");
+        assertEquals(expected, actualBalance);
     }
 
     @Test
@@ -741,5 +748,21 @@ public class EnsResolverImplementationUnitTest {
         assertEquals(expectedBlockNumber, logObject.getBlockNumber());
         BigInteger expectedLogIndex = new BigInteger("c6", 16);
         assertEquals(expectedLogIndex, logObject.getLogIndex());
+    }
+
+    @Test
+    void getTransactionCount_happycase() throws Exception {
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthResolveAddress(HAPPYCASE);
+        setupMockedResponseEthGetTransactionCount();
+
+        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
+        final EthGetTransactionCount ethGetTransactionCount = web3jTestInstance.ethGetTransactionCount(address, DefaultBlockParameter.valueOf("latest")).send();
+        final BigInteger actual = ethGetTransactionCount.getTransactionCount();
+        final BigInteger expected = new BigInteger("1");
+        assertEquals(expected, actual);
     }
 }

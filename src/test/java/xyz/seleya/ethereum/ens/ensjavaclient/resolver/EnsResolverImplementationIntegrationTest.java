@@ -16,6 +16,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
@@ -240,4 +241,17 @@ public class EnsResolverImplementationIntegrationTest {
         EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
         assertEquals("0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2", logObject.getAddress());
     }
+
+    @Test
+    public void getTransactionCount_happycase() throws Exception {
+        String ensName = "kohorst.eth";
+        String address = ensResolverImplementationTestInstance.resolve(ensName);
+        String blockNumber = "latest";
+
+        final EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameter.valueOf(blockNumber)).send();
+        BigInteger actual = ethGetTransactionCount.getTransactionCount();
+        BigInteger expected = new BigInteger("1");
+        assertEquals(expected, actual);
+    }
+
 }

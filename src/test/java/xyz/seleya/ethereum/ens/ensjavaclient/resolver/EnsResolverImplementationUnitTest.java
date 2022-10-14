@@ -15,16 +15,17 @@ import org.web3j.ens.EnsResolutionException;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
+import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -184,12 +185,7 @@ public class EnsResolverImplementationUnitTest {
     }
 
     // Set up for Eth Balance
-    public void setupMockedResponseEthBalance() throws Exception {
-        String stubbedResponseEthBalance = new FakeEthereumJsonRpcResponseCreator().getEthBalanceJsonFile();;
-        mockBackEnd.enqueue((new MockResponse().setBody(stubbedResponseEthBalance)
-                    .addHeader("Content-Type", "application/json")));
-    }
-
+    // First, set up Address Resolver
     private void setupMockedResponseEthResolveAddress(boolean happycase) throws Exception {
         String stubbedResponseEthResolverAddress;
         if (happycase) {
@@ -201,6 +197,23 @@ public class EnsResolverImplementationUnitTest {
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthResolverAddress)
                 .addHeader("Content-Type", "application/json"));
     }
+
+    // Second, set up for Eth Balance
+    public void setupMockedResponseEthBalance() throws Exception {
+        String stubbedResponseEthBalance = new FakeEthereumJsonRpcResponseCreator().getEthBalanceJsonFile();;
+        mockBackEnd.enqueue((new MockResponse().setBody(stubbedResponseEthBalance)
+                    .addHeader("Content-Type", "application/json")));
+    }
+
+    // Setup for Eth Logs. We need set for address resolver, but we can reuse the previous set up.
+    private void setupMockedResponseEthLogs() throws Exception {
+        String stubbedResponseEthLogs = new FakeEthereumJsonRpcResponseCreator().getEthLogsJsonFile();;
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthLogs)
+                .addHeader("Content-Type", "application/json"));
+    }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     @Test
     void getUrlInTextRecords_happycase() throws Exception {
@@ -703,6 +716,30 @@ public class EnsResolverImplementationUnitTest {
 
         final BigInteger expect = new BigInteger("8636179763969940");
         assertEquals(expect, actualBalance);
+    }
 
+    @Test
+    void getEthLogs_happycase() throws Exception {
+        setupMockedEthSync(HAPPYCASE);
+        setupResponseBlockNumber();
+        setupResponseNetVersion ();
+        setupMockedResponseEthCallResolver(HAPPYCASE);
+        setupMockedResponseEthResolveAddress(HAPPYCASE);
+        setupMockedResponseEthLogs();
+
+        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
+        EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf("earliest"), null, address);
+        final EthLog actualEthLogResult = web3jTestInstance.ethGetLogs(ethFilter).send();
+        List<EthLog.LogResult> actual = actualEthLogResult.getResult();
+
+        EthLogInfo ethLogInfo = new EthLogInfo();
+        assertTrue(actual.size() > 0);
+        EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
+        String expectedAddress = "0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2";
+        assertEquals(expectedAddress, logObject.getAddress());
+        BigInteger expectedBlockNumber = new BigInteger("845de4", 16);
+        assertEquals(expectedBlockNumber, logObject.getBlockNumber());
+        BigInteger expectedLogIndex = new BigInteger("c6", 16);
+        assertEquals(expectedLogIndex, logObject.getLogIndex());
     }
 }

@@ -1,6 +1,9 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
+
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -177,5 +180,13 @@ public interface EnsResolver {
      * @return Returns the balance of the account of given address.
      */
     Optional<BigInteger> getBalance(String ensName);
+
+    /**
+     * Returns an array of all logs matching a given filter object.
+     * @param ensName an ENS domain name.
+     *
+     * @return Returns an array of all logs matching a given filter object.
+     */
+    List<EthLogInfo> getLogs(String ensName);
 
 }

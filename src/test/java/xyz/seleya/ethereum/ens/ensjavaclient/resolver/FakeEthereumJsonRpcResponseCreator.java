@@ -28,6 +28,7 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_NET_PEER_COUNT_JSON_FILE = "/eth_net_peer_count_happycase.json";
     private static final String ETH_GET_BALANCE_JSON_FILE = "/eth_get_balance_kohorst_eth.json";
     private static final String ETH_RESOLVE_ADDRESS_JSON_FILE = "/eth_resolve_address_kohorst_eth.json";
+    private static final String ETH_GET_ETH_LOGS_JSON_FILE = "/eth_get_eth_logs_kohorst_eth.json";
 
     // mocked jason file name of non-existing ens name
     private static final String ETH_CALL_NON_EXISTING_ENS_RESOLVER_JSON_FILE = "/eth_call_resolver_non_existing_ens.json";
@@ -109,6 +110,11 @@ public class FakeEthereumJsonRpcResponseCreator {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BALANCE_JSON_FILE);
     }
 
+    public String getEthLogsJsonFile() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_ETH_LOGS_JSON_FILE);
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////
     // Convert JSON file to String
     private String getInfoResponse (String filename) throws IOException, URISyntaxException {
         // get the file handle of the json file

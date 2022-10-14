@@ -1,11 +1,11 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import io.ipfs.cid.Cid;
 import io.ipfs.multihash.Multihash;
 import org.slf4j.Logger;
 import org.springframework.lang.NonNull;
-import org.springframework.util.StringUtils;
 import org.web3j.crypto.Keys;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.ens.Contracts;
@@ -14,6 +14,7 @@ import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.tx.ClientTransactionManager;
 import org.web3j.tx.TransactionManager;
@@ -21,13 +22,12 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
+import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
 
 import java.io.IOException;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.web3j.ens.EnsResolver.DEFAULT_SYNC_THRESHOLD;
@@ -387,6 +387,44 @@ public class EnsResolverImplementation implements EnsResolver {
             Optional<BigInteger> result = Optional.ofNullable(ethGetBalance.getBalance());
             log.info("Current balance on ethereum :" + result);
             return result;
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public List<EthLogInfo> getLogs(String ensName) {
+        String address = resolve(ensName);
+        String fromBlock = "earliest";
+        EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf(fromBlock), null, address);
+
+        if (address == null || !address.startsWith("0x")) {
+            return null;
+        }
+
+        try {
+            final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
+            List<EthLog.LogResult> result = ethLog.getLogs();
+            EthLogInfo ethLogInfo = new EthLogInfo();
+            List<EthLogInfo> ethLogInfoList = new ArrayList<>();
+
+            for (EthLog.LogResult ethLogResult : result) {
+                EthLog.LogObject logObject = (EthLog.LogObject) ethLogResult.get();
+                ethLogInfo.setAddress(logObject.getAddress());
+                ethLogInfo.setBlockHash(logObject.getBlockHash());
+                ethLogInfo.setBlockNumber(logObject.getBlockNumber());
+                ethLogInfo.setData(logObject.getData());
+                ethLogInfo.setLogIndex(logObject.getLogIndex());
+                ethLogInfo.isRemoved(logObject.isRemoved());
+                ethLogInfo.setTopics(logObject.getTopics());
+                ethLogInfo.setTransactionHash(logObject.getTransactionHash());
+                ethLogInfo.setTransactionIndex(logObject.getTransactionIndex());
+                ethLogInfoList.add(ethLogInfo);
+            }
+
+            log.info("All logs matching a given filter object on ethereum :" + result);
+            return ethLogInfoList;
         } catch (IOException ex) {
             log.error("Error while sending json-rpc requests: " + ex);
             throw new RuntimeException("Error while sending json-rpc requests", ex);

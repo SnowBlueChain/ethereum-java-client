@@ -2,6 +2,7 @@ package xyz.seleya.ethereum.ens.ensjavaclient;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 public class EthLogInfo {
     String address;
@@ -84,5 +85,33 @@ public class EthLogInfo {
 
     public void setTransactionIndex(BigInteger transactionIndex) {
         this.transactionIndex = transactionIndex;
+    }
+
+    @Override
+    public String toString() {
+        return "EthLogInfo{" +
+                "address='" + address + '\'' +
+                ", blockHash='" + blockHash + '\'' +
+                ", blockNumber=" + blockNumber +
+                ", data='" + data + '\'' +
+                ", logIndex=" + logIndex +
+                ", removed=" + removed +
+                ", topics=" + topics +
+                ", transactionHash='" + transactionHash + '\'' +
+                ", transactionIndex=" + transactionIndex +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EthLogInfo that = (EthLogInfo) o;
+        return removed == that.removed && Objects.equals(address, that.address) && Objects.equals(blockHash, that.blockHash) && Objects.equals(blockNumber, that.blockNumber) && Objects.equals(data, that.data) && Objects.equals(logIndex, that.logIndex) && Objects.equals(topics, that.topics) && Objects.equals(transactionHash, that.transactionHash) && Objects.equals(transactionIndex, that.transactionIndex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address, blockHash, blockNumber, data, logIndex, removed, topics, transactionHash, transactionIndex);
     }
 }

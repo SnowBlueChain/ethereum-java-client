@@ -737,10 +737,9 @@ public class EnsResolverImplementationUnitTest {
         EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
         String expectedAddress = "0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2";
         assertEquals(expectedAddress, logObject.getAddress());
-//        BigInteger expectedBlockNumber = new BigInteger("8674788");
-//        assertEquals(expectedBlockNumber, logObject.getBlockNumber());
-        BigInteger expectedLogIndex = new BigInteger("198");
+        BigInteger expectedBlockNumber = new BigInteger("845de4", 16);
+        assertEquals(expectedBlockNumber, logObject.getBlockNumber());
+        BigInteger expectedLogIndex = new BigInteger("c6", 16);
         assertEquals(expectedLogIndex, logObject.getLogIndex());
-
     }
 }

@@ -238,8 +238,6 @@ public class EnsResolverImplementationIntegrationTest {
         List<EthLog.LogResult> actual = ethLog.getLogs();
         assertTrue(actual.size() > 0);
         EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
-        BigInteger blockNumber = logObject.getBlockNumber();
-        BigInteger logIndex = logObject.getLogIndex();
         assertEquals("0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2", logObject.getAddress());
     }
 }

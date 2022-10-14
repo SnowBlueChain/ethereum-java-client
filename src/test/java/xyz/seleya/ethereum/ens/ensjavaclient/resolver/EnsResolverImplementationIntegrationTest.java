@@ -1,5 +1,6 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,14 +14,15 @@ import org.web3j.ens.EnsResolutionException;
 import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
+import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 
 import javax.swing.plaf.metal.OceanTheme;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -218,9 +220,26 @@ public class EnsResolverImplementationIntegrationTest {
         String address = ensResolverImplementationTestInstance.resolve(ensName);
         final EthGetBalance actualEthBalance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
         final BigInteger actualBalance = actualEthBalance.getBalance();
-        //System.out.println("actualBalance = " + actualBalance);
 
-        BigInteger expected = new BigInteger("8636179763969940");
-        assertEquals(expected, actualBalance);
+        // The balance will change time to time. We shouldn't use a fixed number to test it.
+//        BigInteger expected = new BigInteger("8636179763969940");
+//        assertEquals(expected, actualBalance);
+        assertTrue(actualBalance.compareTo(new BigInteger("0")) >= 0);
+    }
+
+    @Test
+    public void getLogs_happycase() throws Exception {
+        String ensName = "kohorst.eth";
+        String address = ensResolverImplementationTestInstance.resolve(ensName);
+        String fromBlock = "earliest";
+        EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf(fromBlock), null, address);
+
+        final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
+        List<EthLog.LogResult> actual = ethLog.getLogs();
+        assertTrue(actual.size() > 0);
+        EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
+        BigInteger blockNumber = logObject.getBlockNumber();
+        BigInteger logIndex = logObject.getLogIndex();
+        assertEquals("0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2", logObject.getAddress());
     }
 }

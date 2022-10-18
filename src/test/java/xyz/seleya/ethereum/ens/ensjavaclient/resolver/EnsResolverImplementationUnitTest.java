@@ -221,6 +221,12 @@ public class EnsResolverImplementationUnitTest {
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseEthGetTransactionCount)
                 .addHeader("Content-Type", "application/json"));
     }
+
+    private void setupMockedResponseGetBlockTransactionCountByHash() throws Exception {
+        String stubbedResponseGetBlockTransactionCountByHash = new FakeEthereumJsonRpcResponseCreator().getBlockTransactionCountByHashJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseGetBlockTransactionCountByHash)
+                .addHeader("Content-Type", "application/json"));
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -769,11 +775,12 @@ public class EnsResolverImplementationUnitTest {
     }
 
     @Test
-    void getBlockTransactionCountByHash(String blockHash) throws Exception {
+    void getBlockTransactionCountByHash() throws Exception {
+        setupMockedResponseGetBlockTransactionCountByHash();
+        String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
         final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3jTestInstance.ethGetBlockTransactionCountByHash(blockHash).send();
         final BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
         final BigInteger expected = new BigInteger("b2", 16);
         assertEquals(expected, actual);
-
     }
 }

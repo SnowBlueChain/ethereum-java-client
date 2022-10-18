@@ -443,4 +443,17 @@ public class EnsResolverImplementation implements EnsResolver {
             throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
     }
+
+    @Override
+    public Optional<BigInteger> getBlockTransactionCountByHash(String blockHash) {
+        try {
+            final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3j.ethGetBlockTransactionCountByHash(blockHash).send();
+            Optional<BigInteger> result = Optional.ofNullable(ethGetBlockTransactionCountByHash.getTransactionCount());
+            log.info("The number of transaction count by block hash on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
 }

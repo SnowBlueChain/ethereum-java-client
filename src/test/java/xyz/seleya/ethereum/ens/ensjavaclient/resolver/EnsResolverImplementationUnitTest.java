@@ -11,12 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.web3j.ens.EnsResolutionException;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
@@ -764,5 +766,14 @@ public class EnsResolverImplementationUnitTest {
         final BigInteger actual = ethGetTransactionCount.getTransactionCount();
         final BigInteger expected = new BigInteger("1");
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void getBlockTransactionCountByHash(String blockHash) throws Exception {
+        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3jTestInstance.ethGetBlockTransactionCountByHash(blockHash).send();
+        final BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
+        final BigInteger expected = new BigInteger("b2", 16);
+        assertEquals(expected, actual);
+
     }
 }

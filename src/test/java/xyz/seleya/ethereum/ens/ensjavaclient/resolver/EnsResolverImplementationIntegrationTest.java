@@ -16,6 +16,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
@@ -254,4 +255,12 @@ public class EnsResolverImplementationIntegrationTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void getBlockTransactionCountByHash_happycase() throws Exception {
+        String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
+        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3j.ethGetBlockTransactionCountByHash(blockHash).send();
+        BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
+        BigInteger expected = new BigInteger("b2", 16);
+        assertEquals(expected, actual);
+    }
 }

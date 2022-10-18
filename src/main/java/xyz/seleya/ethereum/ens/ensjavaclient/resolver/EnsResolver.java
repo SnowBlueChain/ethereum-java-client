@@ -196,4 +196,13 @@ public interface EnsResolver {
      * @return Returns a hex code of the integer representing the number of transactions sent from this address.
      */
     Optional<BigInteger> getTransactionCount(String ensName);
+
+
+    /**
+     * Returns the number of transactions in the block with the given block hash.
+     * @param blockHash a string of hashcode of the block on eth.
+     *
+     * @return the number of transactions in the block with the given block hash sent.
+     */
+    Optional<BigInteger> getBlockTransactionCountByHash(String blockHash);
 }

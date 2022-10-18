@@ -796,11 +796,10 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthLogs();
 
         final List<EthBlockInfo> ethBlockInfoList = ensResolverImplementationTestInstance.getEthBlockInfoList(ENS_NAME_KOHORST_ETH);
-        final BigInteger actualBlockNumber = ethBlockInfoList.get(0).getBlockNumber();
-        final String actualBlockHash = ethBlockInfoList.get(0).getBlockHash();
-        final BigInteger expectedBlockNumber = new BigInteger("8674788");
-        final String expectedBlockHash = "0x519cd3dc1ef7bac389bd3637bfbe5a11e7c9eb0aa4d0221d609ebe7fe9a21a9c";
-        assertEquals(expectedBlockNumber, actualBlockNumber);
-        assertEquals(expectedBlockHash, actualBlockHash);
+        final EthBlockInfo actualEthBlockInfo = ethBlockInfoList.get(0);
+        final EthBlockInfo expectedEthBlockInfo = new EthBlockInfo(new BigInteger("8674788"),
+        "0x519cd3dc1ef7bac389bd3637bfbe5a11e7c9eb0aa4d0221d609ebe7fe9a21a9c");
+        assertEquals(expectedEthBlockInfo, actualEthBlockInfo);
+
     }
 }

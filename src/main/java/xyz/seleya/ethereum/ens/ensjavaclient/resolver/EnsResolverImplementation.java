@@ -22,6 +22,7 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Numeric;
 import xyz.seleya.ethereum.ens.contracts.generated.ENSRegistryWithFallback;
 import xyz.seleya.ethereum.ens.contracts.generated.PublicResolver;
+import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.TextRecordsKey;
 
@@ -442,5 +443,41 @@ public class EnsResolverImplementation implements EnsResolver {
             log.error("Error while sending json-rpc requests: " + ex);
             throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
+    }
+
+    @Override
+    public Optional<BigInteger> getBlockTransactionCountByHash(String blockHash) {
+        try {
+            final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3j.ethGetBlockTransactionCountByHash(blockHash).send();
+            Optional<BigInteger> result = Optional.ofNullable(ethGetBlockTransactionCountByHash.getTransactionCount());
+            log.info("The number of transaction count by block hash on ethereum :" + result);
+            return result;
+        } catch (IOException ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public List<EthBlockInfo> getEthBlockInfoList(String ensName) {
+        try {
+            List<EthLogInfo> ethLogInfoList = getLogs(ensName);
+            Comparator<EthBlockInfo> blockInfoComparator = (b1, b2) -> {
+                return b1.getBlockNumber().compareTo(b2.getBlockNumber());
+            };
+
+            TreeSet<EthBlockInfo> ethBlockInfoSet = new TreeSet<>(blockInfoComparator);
+            for (EthLogInfo ethLogInfo : ethLogInfoList) {
+                String blockHash = ethLogInfo.getBlockHash();
+                BigInteger blockNumber = ethLogInfo.getBlockNumber();
+                EthBlockInfo ethBlockInfo = new EthBlockInfo(blockNumber, blockHash);
+                ethBlockInfoSet.add(ethBlockInfo);
+            }
+            return new ArrayList<>(ethBlockInfoSet);
+        } catch (Exception ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+
     }
 }

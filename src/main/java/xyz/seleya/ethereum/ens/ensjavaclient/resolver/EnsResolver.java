@@ -1,5 +1,6 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 
 import java.math.BigInteger;
@@ -196,4 +197,21 @@ public interface EnsResolver {
      * @return Returns a hex code of the integer representing the number of transactions sent from this address.
      */
     Optional<BigInteger> getTransactionCount(String ensName);
+
+
+    /**
+     * Returns the number of transactions in the block with the given block hash.
+     * @param blockHash a string of hashcode of the block on eth.
+     *
+     * @return the number of transactions in the block with the given block hash sent.
+     */
+    Optional<BigInteger> getBlockTransactionCountByHash(String blockHash);
+
+    /**
+     * Returns a list of block number and block hash of a given ensName.
+     * @param ensName an ENS domain name.
+     *
+     * @return the list of block number and block hash of a given ensName.
+     */
+    List<EthBlockInfo> getEthBlockInfoList(String ensName);
 }

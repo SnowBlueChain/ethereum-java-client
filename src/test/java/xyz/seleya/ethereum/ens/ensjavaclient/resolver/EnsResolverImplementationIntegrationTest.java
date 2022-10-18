@@ -16,9 +16,11 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
+import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthLog;
 import org.web3j.protocol.http.HttpService;
+import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 
 import javax.swing.plaf.metal.OceanTheme;
@@ -254,4 +256,24 @@ public class EnsResolverImplementationIntegrationTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void getBlockTransactionCountByHash_happycase() throws Exception {
+        String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
+        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3j.ethGetBlockTransactionCountByHash(blockHash).send();
+        BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
+        BigInteger expected = new BigInteger("b2", 16);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getEthBlockInfo_happycase() throws Exception {
+        String ensName = "kohorst.eth";
+        final List<EthBlockInfo> ethBlockInfoList = ensResolverImplementationTestInstance.getEthBlockInfoList(ensName);
+        final BigInteger actualBlockNumber = ethBlockInfoList.get(0).getBlockNumber();
+        final String actualBlockHash = ethBlockInfoList.get(0).getBlockHash();
+        final BigInteger expectedBlockNumber = new BigInteger("8674788");
+        final String expectedBlockHash = "0x519cd3dc1ef7bac389bd3637bfbe5a11e7c9eb0aa4d0221d609ebe7fe9a21a9c";
+        assertEquals(expectedBlockNumber, actualBlockNumber);
+        assertEquals(expectedBlockHash, actualBlockHash);
+    }
 }

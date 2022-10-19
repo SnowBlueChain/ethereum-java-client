@@ -478,6 +478,16 @@ public class EnsResolverImplementation implements EnsResolver {
             log.error("Error while sending json-rpc requests: " + ex);
             throw new RuntimeException("Error while sending json-rpc requests", ex);
         }
+    }
 
+    @Override
+    public EthBlock getBlockByHash (String blockHash, boolean showDetail) {
+        try {
+            EthBlock ethBlock = web3j.ethGetBlockByHash(blockHash, showDetail).send();
+            return ethBlock;
+        } catch (Exception ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
     }
 }

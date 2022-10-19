@@ -15,10 +15,7 @@ import org.web3j.ens.NameHash;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.response.EthGetBalance;
-import org.web3j.protocol.core.methods.response.EthGetBlockTransactionCountByHash;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-import org.web3j.protocol.core.methods.response.EthLog;
+import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.http.HttpService;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
@@ -275,5 +272,16 @@ public class EnsResolverImplementationIntegrationTest {
         final String expectedBlockHash = "0x519cd3dc1ef7bac389bd3637bfbe5a11e7c9eb0aa4d0221d609ebe7fe9a21a9c";
         assertEquals(expectedBlockNumber, actualBlockNumber);
         assertEquals(expectedBlockHash, actualBlockHash);
+    }
+
+    @Test
+    public void getEthBlockByHash_happycase() throws Exception {
+        String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
+        boolean showDetail = false;
+        final EthBlock ethBlock = web3j.ethGetBlockByHash(blockHash, showDetail).send();
+        final EthBlock.Block block = ethBlock.getBlock();
+        final String actualExtraDate = block.getExtraData();
+        final String expectedExtraDate = "0x505059452d65746865726d696e652d7573322d32";
+        assertEquals(expectedExtraDate, actualExtraDate);
     }
 }

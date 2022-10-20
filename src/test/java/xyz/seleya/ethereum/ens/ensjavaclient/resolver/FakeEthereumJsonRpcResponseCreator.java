@@ -32,6 +32,7 @@ public class FakeEthereumJsonRpcResponseCreator {
     private static final String ETH_GET_TRANSACTION_COUNT_JSON_FILE = "/eth_get_transaction_count_kohorst_eth.json";
     private static final String ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH_JSON_FILE = "/eth_get_block_transaction_count_by_hash_kohorst_eth.json";
     private static final String ETH_GET_BLOCK_BY_HASH_JSON_FILE = "/eth_get_block_by_hash.json";
+    private static final String ETH_GET_TRANSACTION_BY_HASH_JSON_FILE = "/eth_get_eth_transaction_by_hash.json";
 
 
     // mocked jason file name of non-existing ens name
@@ -128,6 +129,10 @@ public class FakeEthereumJsonRpcResponseCreator {
 
     public String getBlockByHashJsonFile() throws IOException, URISyntaxException {
         return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_BLOCK_BY_HASH_JSON_FILE);
+    }
+
+    public String getTransactionByHashJsonFile() throws IOException, URISyntaxException {
+        return getInfoResponse(JSON_FILE_BASE_PATH + ETH_GET_TRANSACTION_BY_HASH_JSON_FILE);
     }
 
 //////////////////////////////////////////////////////////////////////////////////////

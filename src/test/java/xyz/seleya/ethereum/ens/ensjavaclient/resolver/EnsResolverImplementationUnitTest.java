@@ -16,6 +16,7 @@ import org.web3j.ens.EnsResolutionException;
 import org.web3j.protocol.Web3j;
 
 import org.web3j.protocol.core.DefaultBlockParameter;
+import org.web3j.protocol.core.JsonRpc2_0Web3j;
 import org.web3j.protocol.core.methods.request.EthFilter;
 import org.web3j.protocol.core.methods.response.*;
 import org.web3j.protocol.http.HttpService;
@@ -229,6 +230,12 @@ public class EnsResolverImplementationUnitTest {
     private void  setupMockedResponseEthGetBlockByHash() throws Exception {
         String stubbedResponseGetBlockByHash = new FakeEthereumJsonRpcResponseCreator().getBlockByHashJsonFile();
         mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseGetBlockByHash)
+                .addHeader("Content-Type", "application/json"));
+    }
+
+    private void setupMockedResponseEthGetTransactionByHash() throws Exception {
+        String stubbedResponseGetTransactionByHash = new FakeEthereumJsonRpcResponseCreator().getTransactionByHashJsonFile();
+        mockBackEnd.enqueue(new MockResponse().setBody(stubbedResponseGetTransactionByHash)
                 .addHeader("Content-Type", "application/json"));
     }
 
@@ -814,5 +821,15 @@ public class EnsResolverImplementationUnitTest {
         final EthBlock.Block actualBlock = ethBlock.getBlock();
         final BigInteger actualTransactionSize = BigInteger.valueOf(actualBlock.getTransactions().size());
         assertTrue(actualTransactionSize.compareTo(BigInteger.valueOf(178)) >= 0);
+    }
+
+    @Test
+    void getTransactionByHash_happycase() throws Exception {
+        setupMockedResponseEthGetTransactionByHash();
+        String transactionHash = "0x48057cd90b29809c3aef4ba85db157b3195b28fd6d53dd29fbd4e6ea9b5737ed";
+        final EthTransaction actualEthTransaction = web3jTestInstance.ethGetTransactionByHash(transactionHash).send();
+        final String actualBlockHash = actualEthTransaction.getResult().getBlockHash();
+        final String expectBlockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
+        assertEquals(expectBlockHash, actualBlockHash);
     }
 }

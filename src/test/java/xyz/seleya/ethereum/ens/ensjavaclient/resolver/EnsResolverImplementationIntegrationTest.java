@@ -284,4 +284,13 @@ public class EnsResolverImplementationIntegrationTest {
         final String expectedExtraDate = "0x505059452d65746865726d696e652d7573322d32";
         assertEquals(expectedExtraDate, actualExtraDate);
     }
+
+    @Test
+    public void getEthTransactionByHash_happycase() throws Exception {
+        String transactionHash = "0x48057cd90b29809c3aef4ba85db157b3195b28fd6d53dd29fbd4e6ea9b5737ed";
+        final EthTransaction actualEthTransaction = web3j.ethGetTransactionByHash(transactionHash).send();
+        final BigInteger actualBlockNumber = actualEthTransaction.getResult().getBlockNumber();
+        final BigInteger expectedBlockNumber = BigInteger.valueOf(0x86fd69);
+        assertEquals(expectedBlockNumber, actualBlockNumber);
+    }
 }

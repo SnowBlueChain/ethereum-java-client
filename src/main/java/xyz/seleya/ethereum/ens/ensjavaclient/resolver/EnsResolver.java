@@ -1,5 +1,6 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
+import org.web3j.protocol.core.methods.response.EthBlock;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 
@@ -214,4 +215,15 @@ public interface EnsResolver {
      * @return the list of block number and block hash of a given ensName.
      */
     List<EthBlockInfo> getEthBlockInfoList(String ensName);
+
+
+    /**
+     * Returns a list of block number and block hash of a given ensName.
+     * @param blockHash [required] - a string representing the hash (32 bytes) of a block
+     * @param showDetail [required] - SHOW TRANSACTION DETAILS if set to true, it returns the full transaction objects,
+     * if false only the hashes of the transactions.
+     *
+     * @return A block object, or null when no block was found.
+     */
+    EthBlock getBlockByHash (String blockHash, boolean showDetail);
 }

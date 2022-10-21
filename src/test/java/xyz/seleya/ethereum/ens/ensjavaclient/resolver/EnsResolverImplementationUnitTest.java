@@ -737,10 +737,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthResolveAddress(HAPPYCASE);
         setupMockedResponseEthBalance();
 
-        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
-        final EthGetBalance actualEthBalance = web3jTestInstance.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
-        final BigInteger actualBalance = actualEthBalance.getBalance();
-
+        final Optional<BigInteger> actualEthBalance = ensResolverImplementationTestInstance.getBalance(ENS_NAME_KOHORST_ETH);
+        assertTrue(actualEthBalance.isPresent());
+        final BigInteger actualBalance = actualEthBalance.get();
         final BigInteger expected = new BigInteger("8636179763969940");
         assertEquals(expected, actualBalance);
     }
@@ -754,14 +753,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthResolveAddress(HAPPYCASE);
         setupMockedResponseEthLogs();
 
-        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
-        EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf("earliest"), null, address);
-        final EthLog actualEthLogResult = web3jTestInstance.ethGetLogs(ethFilter).send();
-        List<EthLog.LogResult> actual = actualEthLogResult.getResult();
-
-        EthLogInfo ethLogInfo = new EthLogInfo();
-        assertTrue(actual.size() > 0);
-        EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
+        final List<EthLogInfo> actualEthLogResult = ensResolverImplementationTestInstance.getLogs(ENS_NAME_KOHORST_ETH);
+        assertTrue(actualEthLogResult.size() > 0);
+        EthLogInfo logObject = actualEthLogResult.get(0);
         String expectedAddress = "0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2";
         assertEquals(expectedAddress, logObject.getAddress());
         BigInteger expectedBlockNumber = new BigInteger("845de4", 16);
@@ -779,9 +773,9 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthResolveAddress(HAPPYCASE);
         setupMockedResponseEthGetTransactionCount();
 
-        String address = ensResolverImplementationTestInstance.resolve(ENS_NAME_KOHORST_ETH);
-        final EthGetTransactionCount ethGetTransactionCount = web3jTestInstance.ethGetTransactionCount(address, DefaultBlockParameter.valueOf("latest")).send();
-        final BigInteger actual = ethGetTransactionCount.getTransactionCount();
+        final Optional<BigInteger> ethGetTransactionCount = ensResolverImplementationTestInstance.getTransactionCount(ENS_NAME_KOHORST_ETH);
+        assertTrue(ethGetTransactionCount.isPresent());
+        final BigInteger actual = ethGetTransactionCount.get();
         final BigInteger expected = new BigInteger("1");
         assertTrue(actual.compareTo(expected) >= 0);
     }
@@ -790,8 +784,9 @@ public class EnsResolverImplementationUnitTest {
     void getBlockTransactionCountByHash_happycase() throws Exception {
         setupMockedResponseGetBlockTransactionCountByHash();
         String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
-        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3jTestInstance.ethGetBlockTransactionCountByHash(blockHash).send();
-        final BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
+        final Optional<BigInteger> ethGetBlockTransactionCountByHash = ensResolverImplementationTestInstance.getBlockTransactionCountByHash(blockHash);
+        assertTrue(ethGetBlockTransactionCountByHash.isPresent());
+        final BigInteger actual = ethGetBlockTransactionCountByHash.get();
         final BigInteger expected = new BigInteger("b2", 16);
         assertTrue(actual.compareTo(expected) >= 0);
     }
@@ -817,7 +812,7 @@ public class EnsResolverImplementationUnitTest {
         setupMockedResponseEthGetBlockByHash();
         String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
         boolean showDetail = false;
-        final EthBlock ethBlock = web3jTestInstance.ethGetBlockByHash(blockHash, showDetail).send();
+        final EthBlock ethBlock = ensResolverImplementationTestInstance.getBlockByHash(blockHash, showDetail);
         final EthBlock.Block actualBlock = ethBlock.getBlock();
         final BigInteger actualTransactionSize = BigInteger.valueOf(actualBlock.getTransactions().size());
         assertTrue(actualTransactionSize.compareTo(BigInteger.valueOf(178)) >= 0);
@@ -827,7 +822,7 @@ public class EnsResolverImplementationUnitTest {
     void getTransactionByHash_happycase() throws Exception {
         setupMockedResponseEthGetTransactionByHash();
         String transactionHash = "0x48057cd90b29809c3aef4ba85db157b3195b28fd6d53dd29fbd4e6ea9b5737ed";
-        final EthTransaction actualEthTransaction = web3jTestInstance.ethGetTransactionByHash(transactionHash).send();
+        final EthTransaction actualEthTransaction = ensResolverImplementationTestInstance.getTransactionByHash(transactionHash);
         final String actualBlockHash = actualEthTransaction.getResult().getBlockHash();
         final String expectBlockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
         assertEquals(expectBlockHash, actualBlockHash);

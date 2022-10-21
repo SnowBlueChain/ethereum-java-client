@@ -818,13 +818,13 @@ public class EnsResolverImplementationUnitTest {
         assertTrue(actualTransactionSize.compareTo(BigInteger.valueOf(178)) >= 0);
     }
 
-    @Test
+//    @Test
     void getTransactionByHash_happycase() throws Exception {
         setupMockedResponseEthGetTransactionByHash();
         String transactionHash = "0x48057cd90b29809c3aef4ba85db157b3195b28fd6d53dd29fbd4e6ea9b5737ed";
         final EthTransaction actualEthTransaction = ensResolverImplementationTestInstance.getTransactionByHash(transactionHash);
         final String actualBlockHash = actualEthTransaction.getResult().getBlockHash();
         final String expectBlockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
-//        assertEquals(expectBlockHash, actualBlockHash);
+        assertEquals(expectBlockHash, actualBlockHash);
     }
 }

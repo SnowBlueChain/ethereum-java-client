@@ -227,38 +227,27 @@ public class EnsResolverImplementationIntegrationTest {
     @Test
     public void getBalance_happycase() throws Exception {
         String ensName = "kohorst.eth";
-        String address = ensResolverImplementationTestInstance.resolve(ensName);
-        final EthGetBalance actualEthBalance = web3j.ethGetBalance(address, DefaultBlockParameter.valueOf("latest")).send();
-        final BigInteger actualBalance = actualEthBalance.getBalance();
-
-        // The balance will change time to time. We shouldn't use a fixed number to test it.
-//        BigInteger expected = new BigInteger("8636179763969940");
-//        assertEquals(expected, actualBalance);
+        final Optional<BigInteger> actualEthBalance = ensResolverImplementationTestInstance.getBalance(ensName);
+        assertTrue(actualEthBalance.isPresent());
+        final BigInteger actualBalance = actualEthBalance.get();
         assertTrue(actualBalance.compareTo(new BigInteger("0")) >= 0);
     }
 
     @Test
     public void getLogs_happycase() throws Exception {
         String ensName = "kohorst.eth";
-        String address = ensResolverImplementationTestInstance.resolve(ensName);
-        String fromBlock = "earliest";
-        EthFilter ethFilter = new EthFilter(DefaultBlockParameter.valueOf(fromBlock), null, address);
-
-        final EthLog ethLog = web3j.ethGetLogs(ethFilter).send();
-        List<EthLog.LogResult> actual = ethLog.getLogs();
-        assertTrue(actual.size() > 0);
-        EthLog.LogObject logObject = (EthLog.LogObject) actual.get(0);
+        final List<EthLogInfo> ethLogInfoList = ensResolverImplementationTestInstance.getLogs(ensName);
+        assertTrue(ethLogInfoList.size() > 0);
+        EthLogInfo logObject = ethLogInfoList.get(0);
         assertEquals("0xda7a203806a6be3c3c4357c38e7b3aaac47f5dd2", logObject.getAddress());
     }
 
     @Test
     public void getTransactionCount_happycase() throws Exception {
         String ensName = "kohorst.eth";
-        String address = ensResolverImplementationTestInstance.resolve(ensName);
-        String blockNumber = "latest";
-
-        final EthGetTransactionCount ethGetTransactionCount = web3j.ethGetTransactionCount(address, DefaultBlockParameter.valueOf(blockNumber)).send();
-        BigInteger actual = ethGetTransactionCount.getTransactionCount();
+        final Optional<BigInteger> ethGetTransactionCount = ensResolverImplementationTestInstance.getTransactionCount(ensName);
+        assertTrue(ethGetTransactionCount.isPresent());
+        BigInteger actual = ethGetTransactionCount.get();
         BigInteger expected = new BigInteger("1");
         assertEquals(expected, actual);
     }
@@ -266,8 +255,9 @@ public class EnsResolverImplementationIntegrationTest {
     @Test
     public void getBlockTransactionCountByHash_happycase() throws Exception {
         String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
-        final EthGetBlockTransactionCountByHash ethGetBlockTransactionCountByHash = web3j.ethGetBlockTransactionCountByHash(blockHash).send();
-        BigInteger actual = ethGetBlockTransactionCountByHash.getTransactionCount();
+        final Optional<BigInteger> ethGetBlockTransactionCountByHash = ensResolverImplementationTestInstance.getBlockTransactionCountByHash(blockHash);
+        assertTrue(ethGetBlockTransactionCountByHash.isPresent());
+        BigInteger actual = ethGetBlockTransactionCountByHash.get();
         BigInteger expected = new BigInteger("b2", 16);
         assertEquals(expected, actual);
     }
@@ -288,10 +278,19 @@ public class EnsResolverImplementationIntegrationTest {
     public void getEthBlockByHash_happycase() throws Exception {
         String blockHash = "0x30791966b5a0bdd3376279400512b32bb8ef54e0769ce3dd6c74b2744dcbd808";
         boolean showDetail = false;
-        final EthBlock ethBlock = web3j.ethGetBlockByHash(blockHash, showDetail).send();
+        final EthBlock ethBlock = ensResolverImplementationTestInstance.getBlockByHash(blockHash, showDetail);
         final EthBlock.Block block = ethBlock.getBlock();
         final String actualExtraDate = block.getExtraData();
         final String expectedExtraDate = "0x505059452d65746865726d696e652d7573322d32";
         assertEquals(expectedExtraDate, actualExtraDate);
+    }
+
+    @Test
+    public void getEthTransactionByHash_happycase() throws Exception {
+        String transactionHash = "0x48057cd90b29809c3aef4ba85db157b3195b28fd6d53dd29fbd4e6ea9b5737ed";
+        final EthTransaction actualEthTransaction = ensResolverImplementationTestInstance.getTransactionByHash(transactionHash);
+        final BigInteger actualBlockNumber = actualEthTransaction.getResult().getBlockNumber();
+        final BigInteger expectedBlockNumber = BigInteger.valueOf(0x86fd69);
+        assertEquals(expectedBlockNumber, actualBlockNumber);
     }
 }

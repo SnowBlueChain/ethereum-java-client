@@ -1,6 +1,5 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.annotations.VisibleForTesting;
 import io.ipfs.cid.Cid;
 import io.ipfs.multihash.Multihash;
@@ -485,6 +484,17 @@ public class EnsResolverImplementation implements EnsResolver {
         try {
             EthBlock ethBlock = web3j.ethGetBlockByHash(blockHash, showDetail).send();
             return ethBlock;
+        } catch (Exception ex) {
+            log.error("Error while sending json-rpc requests: " + ex);
+            throw new RuntimeException("Error while sending json-rpc requests", ex);
+        }
+    }
+
+    @Override
+    public EthTransaction getTransactionByHash(String transactionHash) {
+        try {
+            EthTransaction ethTransaction = web3j.ethGetTransactionByHash(transactionHash).send();
+            return ethTransaction;
         } catch (Exception ex) {
             log.error("Error while sending json-rpc requests: " + ex);
             throw new RuntimeException("Error while sending json-rpc requests", ex);

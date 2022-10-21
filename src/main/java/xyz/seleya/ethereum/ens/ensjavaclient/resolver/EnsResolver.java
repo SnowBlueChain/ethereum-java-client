@@ -1,6 +1,7 @@
 package xyz.seleya.ethereum.ens.ensjavaclient.resolver;
 
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthTransaction;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthBlockInfo;
 import xyz.seleya.ethereum.ens.ensjavaclient.EthLogInfo;
 
@@ -226,4 +227,12 @@ public interface EnsResolver {
      * @return A block object, or null when no block was found.
      */
     EthBlock getBlockByHash (String blockHash, boolean showDetail);
+
+    /**
+     * Returns an Eth transaction object, or null when no transaction was found.
+     * @param transactionHash [required] - a string representing the hash (32 bytes) of a transaction
+     *
+     * @return an Eth transaction object, or null when no transaction was found.
+     */
+    EthTransaction getTransactionByHash (String transactionHash);
 }

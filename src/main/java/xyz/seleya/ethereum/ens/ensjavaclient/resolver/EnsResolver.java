@@ -146,6 +146,15 @@ public interface EnsResolver {
      */
     Map<String, String> getMetadata(String contractId);
 
+    /**
+     * Returns the information that's associated with the ENS name and keyword in textrecords.
+     *
+     * @param contractId an ENS domain name (a.k.a. ensName).
+     * @param keyword a keyword of the records that we are looking for. e.g. url, github
+     * @return a string if any. The key is the keyword in textrecords and value is the corresponding result.
+     */
+    Optional<String> findTextRecords(String contractId, String keyword);
+
 
     /**
      * Returns the latest block number.

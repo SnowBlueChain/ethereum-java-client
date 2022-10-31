@@ -200,7 +200,7 @@ public class EnsResolverImplementation implements EnsResolver {
                     byte[] nameHash = NameHash.nameHashAsBytes(ensName);
                     String resolverAddress = ensRegistry.resolver(nameHash).send();
 
-                    PublicResolver ensResolver =  PublicResolver.load(
+                    PublicResolver ensResolver = PublicResolver.load(
                             resolverAddress, web3j, transactionManager, new DefaultGasProvider());
 
                     // save the resolver to map of ensNameToEthereumResolver then return the resolver
@@ -217,13 +217,13 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     // text records
-    Optional<String> findTextRecords(@NonNull final String ethDomainName, String keyword) {
+    public Optional<String> findTextRecords(@NonNull final String ethDomainName, String keyword) {
         PublicResolver resolver = lookupResolver(ethDomainName);
         byte[] nameHash = NameHash.nameHashAsBytes(ethDomainName);
         try {
-                Optional<String> textRecord = Optional.ofNullable(resolver.text(nameHash, keyword).send());
-                log.info("text record - " + keyword + " : " + textRecord);
-                return textRecord;
+            Optional<String> textRecord = Optional.ofNullable(resolver.text(nameHash, keyword).send());
+            log.info("text record - " + keyword + " : " + textRecord);
+            return textRecord;
         } catch (Exception e) {
             //throw new RuntimeException("Unable to execute Ethereum request", e);
             return Optional.empty();
@@ -301,7 +301,7 @@ public class EnsResolverImplementation implements EnsResolver {
     @Override
     public Map<String, String> getMetadata(String contractId) {
         Map<String, String> metaMap = new HashMap<>();
-        for(TextRecordsKey textrecordsKey : TextRecordsKey.values()) {
+        for (TextRecordsKey textrecordsKey : TextRecordsKey.values()) {
             log.info("textrecordsKey: " + textrecordsKey);
             String keyword = textrecordsKey.getKey();
             Optional<String> resultOptional = findTextRecords(contractId, keyword);
@@ -360,7 +360,7 @@ public class EnsResolverImplementation implements EnsResolver {
 
     @Override
     public Optional<BigInteger> getNetPeerCount() {
-        try{
+        try {
             // netPeerCount returns the number of peers currently connected to the client.
             final NetPeerCount netPeerCount = web3j.netPeerCount().send();
             Optional<BigInteger> result = Optional.ofNullable(netPeerCount.getQuantity());
@@ -480,7 +480,7 @@ public class EnsResolverImplementation implements EnsResolver {
     }
 
     @Override
-    public EthBlock getBlockByHash (String blockHash, boolean showDetail) {
+    public EthBlock getBlockByHash(String blockHash, boolean showDetail) {
         try {
             EthBlock ethBlock = web3j.ethGetBlockByHash(blockHash, showDetail).send();
             return ethBlock;
